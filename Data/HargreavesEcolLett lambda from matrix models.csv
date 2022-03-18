@@ -1,0 +1,97 @@
+transect,site,Source,treat,s1s2,seedperEm_Ps1,pEm_s1P,lambda,pEmfrom,dormancyfrom
+HB,A,H,OTC,0.032,0.575,0.029333333,0.14685365,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,H,OTC,0.032,0.575,0.1488,0.3089437,H,av across HEAandsource
+HB,A,M,OTC,0.032,10.9463141,0.06,0.82657686,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,M,OTC,0.032,10.9463141,0.236,1.623353471,H,av across HEAandsource
+HB,A,MT,OTC,0.032,12.98306878,0.054222222,0.855182245,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,MT,OTC,0.032,12.98306878,0.283,1.932889,H,av across HEAandsource
+HB,A,F,TR,0.032,0.229166667,0.050666667,0.1249363,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,H,TR,0.032,0.133333333,0.029333333,0.08055316,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,L,TR,0.032,0,0.090666667,0,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,M,TR,0.032,0,0.06,0,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,MT,TR,0.032,0.68627451,0.054222222,0.2095648,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,H,OTC,0.032,31.20627219,0.1488,2.170931,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,M,OTC,0.032,89.21974182,0.236,4.283815,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,MT,OTC,0.032,54.72636195,0.283,3.847683,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,F,TR,0.032,14.16982924,0.244,1.875488,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,H,TR,0.032,16.32292253,0.1488,1.574467858,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,L,TR,0.032,2.723422812,0.226666667,0.801853147,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,M,TR,0.032,17.14588516,0.236,2.026503502,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,H,MT,TR,0.032,17.55439094,0.283,2.244922,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,HE,E,TR,0.032,0.916666667,0.13,0.361575848,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,HE,F,TR,0.032,1.796,0.176,0.578451776,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,HE,H,TR,0.032,0.888888889,0.112,0.331929669,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,HE,L,TR,0.032,0.166666667,0.308,0.243132854,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,HE,M,TR,0.032,0.526253968,0.288,0.405637194,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,HE,MT,TR,0.032,0.262857143,0.38,0.332451757,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A1,F,TR,0.0702,0.19726949,0.272,0.26938468,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A1,H,TR,0.0702,1.569095816,0.23,0.636867437,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A1,L,TR,0.0702,0.561403509,0.308,0.452405992,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A1,M,TR,0.0702,0.201680672,0.15,0.2125376,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A1,MT,TR,0.0702,1.319413172,0.212,0.565144906,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,H,OTC,0.0702,0.50487013,0.1928,0.349060142,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,H,OTC,0.0702,0.50487013,0.3688,0.468029687,HE,av across HEAandsource
+NK,A2,M,OTC,0.0702,1.357142857,0.1416,0.474876578,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,M,OTC,0.0702,1.357142857,0.3248,0.699954879,HE,av across HEAandsource
+NK,A2,MT,OTC,0.0702,1.008006536,0.202,0.487702839,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,MT,OTC,0.0702,1.008006536,0.404,0.674213957,HE,av across HEAandsource
+NK,A2,E,TR,0.0702,9,0.12,1.074923067,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,F,TR,0.0702,0.083333333,0.222666667,0.1757683,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,H,TR,0.0702,0.791666667,0.1928,0.427356731,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,L,TR,0.0702,0,0.234666667,0,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,M,TR,0.0702,0.197916667,0.1416,0.2061468,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,A2,MT,TR,0.0702,4.639880952,0.202,1.003855884,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,H,OTC,0.0702,13.90576253,0.3688,2.299978452,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,M,OTC,0.0702,9.905385656,0.3248,1.829118183,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,MT,OTC,0.0702,20.39646916,0.404,2.905863147,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,E,TR,0.0702,20.14020806,0.281333333,2.415716856,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,F,TR,0.0702,13.71845972,0.390666667,2.350391095,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,H,TR,0.0702,16.25571263,0.3688,2.483840084,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,L,TR,0.0702,8.472835681,0.513333333,2.1209141,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,M,TR,0.0702,19.2316268,0.3248,2.534629685,TR&OTCplots at same site as P1s,av across HEAandsource
+NK,HE,MT,TR,0.0702,20.98687728,0.404,2.947105757,TR&OTCplots at same site as P1s,av across HEAandsource
+HB,A,H,OTC,0.009874741,0.575,0.029333333,0.1349029,TR&OTCplots at same site as P1s,by site and source
+HB,A,M,OTC,0.011539306,10.9463141,0.06,0.816209123,TR&OTCplots at same site as P1s,by site and source
+HB,A,MT,OTC,0.007031746,12.98306878,0.054222222,0.84255,TR&OTCplots at same site as P1s,by site and source
+HB,A,F,TR,0.011505051,0.229166667,0.050666667,0.1136608,TR&OTCplots at same site as P1s,by site and source
+HB,A,H,TR,0.009874741,0.133333333,0.029333333,0.06767084,TR&OTCplots at same site as P1s,by site and source
+HB,A,L,TR,0,0,0.090666667,0,TR&OTCplots at same site as P1s,by site and source
+HB,A,M,TR,0.011539306,0,0.06,0,TR&OTCplots at same site as P1s,by site and source
+HB,A,MT,TR,0.007031746,0.68627451,0.054222222,0.1964503,TR&OTCplots at same site as P1s,by site and source
+HB,H,H,OTC,0.049566483,31.20627219,0.1488,2.179802,TR&OTCplots at same site as P1s,by site and source
+HB,H,M,OTC,0.065776156,89.21974182,0.236,4.621766,TR&OTCplots at same site as P1s,by site and source
+HB,H,MT,OTC,0.062375053,54.72636195,0.283,3.966719,TR&OTCplots at same site as P1s,by site and source
+HB,H,F,TR,0.086667054,14.16982924,0.244,1.903257216,TR&OTCplots at same site as P1s,by site and source
+HB,H,H,TR,0.049566483,16.32292253,0.1488,1.583457383,TR&OTCplots at same site as P1s,by site and source
+HB,H,L,TR,0.040792781,2.723422812,0.226666667,0.806351341,TR&OTCplots at same site as P1s,by site and source
+HB,H,M,TR,0.065776156,17.14588516,0.236,2.044730647,TR&OTCplots at same site as P1s,by site and source
+HB,H,MT,TR,0.062375053,17.55439094,0.283,2.260283,TR&OTCplots at same site as P1s,by site and source
+HB,HE,E,TR,0.005,0.916666667,0.13,0.3477,TR&OTCplots at same site as P1s,by site and source
+HB,HE,F,TR,0.026671827,1.796,0.176,0.575718209,TR&OTCplots at same site as P1s,by site and source
+HB,HE,H,TR,0.020081871,0.888888889,0.112,0.325724917,TR&OTCplots at same site as P1s,by site and source
+HB,HE,L,TR,0,0.166666667,0.308,0.2288261,TR&OTCplots at same site as P1s,by site and source
+HB,HE,M,TR,0.013333333,0.526253968,0.288,0.396032288,TR&OTCplots at same site as P1s,by site and source
+HB,HE,MT,TR,0.015757576,0.262857143,0.38,0.324023991,TR&OTCplots at same site as P1s,by site and source
+NK,A1,F,TR,0.092047045,0.19726949,0.272,0.282191822,TR&OTCplots at same site as P1s,by site and source
+NK,A1,H,TR,0.073324111,1.569095816,0.23,0.638522624,TR&OTCplots at same site as P1s,by site and source
+NK,A1,L,TR,0.085607926,0.561403509,0.308,0.460828436,TR&OTCplots at same site as P1s,by site and source
+NK,A1,M,TR,0.082539319,0.201680672,0.15,0.2200301,TR&OTCplots at same site as P1s,by site and source
+NK,A1,MT,TR,0.02885101,1.319413172,0.212,0.543503654,TR&OTCplots at same site as P1s,by site and source
+NK,A2,H,OTC,0.049743544,0.50487013,0.1928,0.337853506,TR&OTCplots at same site as P1s,by site and source
+NK,A2,M,OTC,0.067061055,1.357142857,0.1416,0.473184624,TR&OTCplots at same site as P1s,by site and source
+NK,A2,MT,OTC,0.090417945,1.008006536,0.202,0.498707783,TR&OTCplots at same site as P1s,by site and source
+NK,A2,E,TR,0.086454545,9,0.12,1.083356398,TR&OTCplots at same site as P1s,by site and source
+NK,A2,F,TR,0.117778163,0.083333333,0.222666667,0.2072922,TR&OTCplots at same site as P1s,by site and source
+NK,A2,H,TR,0.049743544,0.791666667,0.1928,0.41634583,TR&OTCplots at same site as P1s,by site and source
+NK,A2,L,TR,0.045289473,0,0.234666667,0,TR&OTCplots at same site as P1s,by site and source
+NK,A2,M,TR,0.067061055,0.197916667,0.1416,0.2042622,TR&OTCplots at same site as P1s,by site and source
+NK,A2,MT,TR,0.090417945,4.639880952,0.202,1.014383778,TR&OTCplots at same site as P1s,by site and source
+NK,HE,H,OTC,0.083607408,13.90576253,0.3688,2.306796557,TR&OTCplots at same site as P1s,by site and source
+NK,HE,M,OTC,0.075396629,9.905385656,0.3248,1.831769221,TR&OTCplots at same site as P1s,by site and source
+NK,HE,MT,OTC,0.049759555,20.39646916,0.404,2.894800656,TR&OTCplots at same site as P1s,by site and source
+NK,HE,E,TR,0.064518486,20.14020806,0.281333333,2.412832415,TR&OTCplots at same site as P1s,by site and source
+NK,HE,F,TR,0.090122634,13.71845972,0.390666667,2.360525719,TR&OTCplots at same site as P1s,by site and source
+NK,HE,H,TR,0.083607408,16.25571263,0.3688,2.490651119,TR&OTCplots at same site as P1s,by site and source
+NK,HE,L,TR,0.030391363,8.472835681,0.513333333,2.099018682,TR&OTCplots at same site as P1s,by site and source
+NK,HE,M,TR,0.075396629,19.2316268,0.3248,2.537267871,TR&OTCplots at same site as P1s,by site and source
+NK,HE,MT,TR,0.049759555,20.98687728,0.404,2.935934809,TR&OTCplots at same site as P1s,by site and source
