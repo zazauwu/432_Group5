@@ -1,0 +1,12 @@
+---
+title: "Project"
+author: "Group5"
+date: '2022-03-22'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## PCA
