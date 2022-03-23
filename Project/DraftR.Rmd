@@ -5,8 +5,12 @@ date: '2022-03-22'
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+GitHub Link:
+
+# Import Data
+```{r}
+ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
+ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
 ```
 
 ## PCA
