@@ -7,10 +7,46 @@ output: pdf_document
 
 GitHub Link:
 
-# Import Data
+#Load Package
 ```{r}
-ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
-ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
+library(dplyr)
+library(tidyr)
+library(MASS)
+library(MuMIn)
+library(ggplot2)
+library(reshape2)
+library(grid)
+library(gridExtra)
+library(ggfortify)
 ```
 
+# Import Data
+```{r}
+###NK & HB lifetime reproductive success data
+ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
+ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
+
+###NK & HB phenology data
+phenNK <- read.csv("./Data/HargreavesEcolLett data phenologyNK.csv")
+phenHB <- read.csv("./Data/HargreavesEcolLett data phenologyNK.csv")
+```
+
+```{r}
+str(phenHB)
+```
+
+
 ## PCA
+```{r}
+# delete rows with NA value
+USBwithF1NA <- USBwithF1 %>%
+    na.omit
+names(USBwithF1NA)
+```
+
+
+Do plants transplanted from low-, mid-, and high- ranges vary in their ability to phenologically adapt to ranges outside their native range? (Fig. 2)
+```{r}
+
+```
+
