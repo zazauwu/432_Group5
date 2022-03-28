@@ -7,9 +7,9 @@ output: pdf_document
 
 GitHub Link:
 
-#Load Package
+# Load Package
 ```{r}
-library(dplyr)
+
 library(tidyr)
 library(MASS)
 library(MuMIn)
@@ -18,6 +18,8 @@ library(reshape2)
 library(grid)
 library(gridExtra)
 library(ggfortify)
+library(dplyr)
+
 ```
 
 # Import Data
@@ -28,12 +30,31 @@ ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
 
 ###NK & HB phenology data
 phenNK <- read.csv("./Data/HargreavesEcolLett data phenologyNK.csv")
-phenHB <- read.csv("./Data/HargreavesEcolLett data phenologyNK.csv")
+phenHB <- read.csv("./Data/HargreavesEcolLett data phenologyHB.csv")
 ```
 
 ```{r}
 str(phenHB)
 ```
+
+
+# Combine Datasets and Subset 
+```{r}
+
+# Merging HB and NK phenology datasets
+
+phenmerged <- rbind(phenNK, phenHB)
+
+# Subset phendat to variable we want
+
+phendat <- phenmerged %>% dplyr::select(peak = transect, year, source = Source, site, treatment = treat, 
+                                        final_fate = final.fate, DEm_plotavg = DEm.estplotav)
+
+
+
+```
+
+
 
 
 ## PCA
