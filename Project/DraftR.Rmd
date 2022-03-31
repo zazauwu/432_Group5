@@ -9,7 +9,7 @@ GitHub Link:
 
 # Load Package
 ```{r}
-
+library(ape)
 library(tidyr)
 library(MASS)
 library(MuMIn)
@@ -31,12 +31,36 @@ ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
 ###NK & HB phenology data
 phenNK <- read.csv("./Data/HargreavesEcolLett data phenologyNK.csv")
 phenHB <- read.csv("./Data/HargreavesEcolLett data phenologyHB.csv")
+
+###Climate by site data
+clim <- read.csv("./Data/HargreavesEcolLett data hobo&ibutton summary by site.csv")
 ```
 
+## Data Check and Modification
 ```{r}
-str(phenHB)
+sapply(clim, class)
 ```
+```{r}
+#d.snowpack.10.11=days with snowpack winter 2010-2011
+#wTmin.10.11=minimum temperature winter (C) at plant height 2010-2011
+#Dec.FebTav.10.11=mean temperature at plant height from Dec1st 2010 - Feb 28th 2011
+#d.grows.11=# days in growing season 2011 (start / end of gorwing season determined by sustained snow or frost)
+#GDD.grows.11=# growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011
+#GDD.yr.11=# growing degree days in 2011 (ie not truncated to estimated growing season)
+#avmaxminTJuly.11=mean July 2011 temperature (C) calculated from daily min and max T: mean(July1stmin + July1stmax + July2ndmin + July2ndmax + ... July31stmi + July31stmax)
+#avTJuly.11=mean July 2011 temperature (C) calculated from raw data (ie >2 measurements per day)
 
+#hence, convert the above columns into numeric variables
+cols.num <- c("d.snowpack.11.12", "wTmin.11.12", "Dec.FebTav.11.12", "d.grows.12", "GDD.grows.12", "GDD.yr.12", "avmaxminTJuly.12", "avTJuly.12", "GDD.grows.13", "GDD.yr.13", "avmaxminTJuly.13", "avTJuly.13", "d.snowpack.13.14", "wTmin.13.14", "Dec.FebTav.13.14")
+clim[cols.num] <- sapply(clim[cols.num],as.numeric)
+sapply(clim, class)
+head(clim)
+```
+```{r}
+#use 'melt' to convert the 'clim' data.frame into long format in which 'transect' and 'site' are identifier variables, while the other are considered as the measured variables.
+clim.sea <- melt(clim, id.vars = c('transect','site'), measure.vars = 3:29)
+head(clim.sea)
+```
 
 # Combine Datasets and Subset 
 ```{r}
@@ -58,11 +82,25 @@ phendat <- phenmerged %>% dplyr::select(peak = transect, year, source = Source, 
 
 
 ## PCA
+Take phenology data and look at low v mid v high (Q2 and Q3) 
+Are low similar to each other, are mid similar, are high similar 
+Origin vs transplant location 
+Phenotypic plasticity 
 ```{r}
-# delete rows with NA value
-USBwithF1NA <- USBwithF1 %>%
+# delete rows with NA value??
+PhenoNA <- phenmerged %>%
     na.omit
-names(USBwithF1NA)
+```
+
+```{r}
+names(phenmerged)
+```
+```{r}
+str(phenmerged)
+```
+```{r}
+phenmerged$year <- as.factor(phenmerged$year)
+row.names(phenmerged) <- phenmerged$X
 ```
 
 
