@@ -129,21 +129,40 @@ clim.not.win <- subset(clim.ca, subset = year %in% c("year 2011", "year 2012", "
                    select=-c(d.snowpack, Dec.FebTav, wTmin))
 head(clim.not.win)
 ```
+## Visualize Climate Similarity/Disimilarity
+
+### In winter starting from 2010 to 2014
 
 ```{r}
-climDist <- dist(clim.ca, method = 'euclidean')
-climDistMat <- as.matrix(climDist)
+climwDist <- dist(clim.win, method = 'euclidean')
+climwDistMat <- as.matrix(climwDist)
 # rearrange the data from an n×n matrix to a n2×3 matrix
-climPDat <- melt(climDistMat)
-climPDat
+climwPDat <- melt(climwDistMat)
+
 # plot the matrix
-ggplot(data = climPDat, aes(x = Var1, y = Var2, fill = value)) +
+ggplot(data = climwPDat, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradientn(colours = c("white","blue","green","red")) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+### In other seasons except winter from 2011 to 2013
+
+```{r}
+climnwDist <- dist(clim.not.win, method = 'euclidean')
+climnwDistMat <- as.matrix(climnwDist)
+# rearrange the data from an n×n matrix to a n2×3 matrix
+climnwPDat <- melt(climnwDistMat)
+
+# plot the matrix
+ggplot(data = climnwPDat, aes(x = Var1, y = Var2, fill = value)) +
   geom_tile() +
   scale_fill_gradientn(colours = c("white","blue","green","red")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
 
 # Phenology Analysis
+
+Do plants transplanted from low-, mid-, and high- ranges vary in their ability to phenologically adapt to ranges outside their native range?
 
 ## Combine Datasets and Subset
 
@@ -184,9 +203,15 @@ str(phenmerged)
 phenmerged$year <- as.factor(phenmerged$year)
 row.names(phenmerged) <- phenmerged$X
 ```
-
-Do plants transplanted from low-, mid-, and high- ranges vary in their ability to phenologically adapt to ranges outside their native range? (Fig. 2)
+## plot
 
 ```{r}
 
 ```
+
+## Visualize Similarity
+
+```{r}
+
+```
+
