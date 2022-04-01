@@ -43,9 +43,11 @@ sapply(clim, class)
 ```
 ```{r}
 #variable explanation:
+##winter limited:
   #d.snowpack.10.11 = days with snowpack winter 2010-2011
   #wTmin.10.11 = minimum temperature winter (C) at plant height 2010-2011
   #Dec.FebTav.10.11 = mean temperature at plant height from Dec1st 2010 - Feb 28th 2011
+##
   #d.grows.11 = # days in growing season 2011 (start / end of gorwing season determined by sustained snow or frost)
   #GDD.grows.11 = # growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011
   #GDD.yr.11 = # growing degree days in 2011 (ie not truncated to estimated growing season)
@@ -102,8 +104,38 @@ head(clim.me)
 ```{r}
 #use 'dcast' to cast the molten data.frame into a data frame
 clim.ca <- dcast(clim.me, ID + year ~ variable)
+clim.ca$year <- as.factor(clim.ca$year)
 head(clim.ca)
 ```
+```{r}
+#select all rows that contains winter season info and columns related to winter
+clim.win <- subset(clim.ca, subset = year %in% c("winter 10-11", "winter 11-12", "winter 12-13", "winter 13-14"),
+                   select=c(ID, year, d.snowpack, Dec.FebTav, wTmin))
+head(clim.win)
+```
+
+```{r}
+#select all rows that contains season info except for winter and columns related
+clim.not.win <- subset(clim.ca, subset = year %in% c("year 2011", "year 2012", "year 2013"),
+                   select=-c(d.snowpack, Dec.FebTav, wTmin))
+head(clim.not.win)
+```
+
+```{r}
+climDist <- dist(clim.ca, method = 'euclidean')
+climDistMat <- as.matrix(climDist)
+# rearrange the data from an n×n matrix to a n2×3 matrix
+climPDat <- melt(climDistMat)
+climPDat
+# plot the matrix
+ggplot(data = climPDat, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_gradientn(colours = c("white","blue","green","red")) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
+```
+
+
+
 # Phenology Analysis
 ## Combine Datasets and Subset 
 ```{r}
