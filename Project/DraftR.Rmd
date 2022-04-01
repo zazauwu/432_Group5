@@ -36,6 +36,7 @@ phenHB <- read.csv("./Data/HargreavesEcolLett data phenologyHB.csv")
 clim <- read.csv("./Data/HargreavesEcolLett data hobo&ibutton summary by site.csv")
 ```
 
+# Climate Effect Analysis
 ## Data Check and Modification
 ```{r}
 sapply(clim, class)
@@ -49,7 +50,7 @@ sapply(clim, class)
   #GDD.grows.11 = # growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011
   #GDD.yr.11 = # growing degree days in 2011 (ie not truncated to estimated growing season)
   #avmaxminTJuly.11 = mean July 2011 temperature (C) calculated from daily min and max T: 
-      #mean(July1stmin + July1stmax + July2ndmin + July2ndmax + ... July31stmi + July31stmax)
+      ##mean(July1stmin + July1stmax + July2ndmin + July2ndmax + ... July31stmi + July31stmax)
   #avTJuly.11 = mean July 2011 temperature (C) calculated from raw data (ie >2 measurements per day)
 
 #hence, convert the above columns into numeric variables
@@ -59,13 +60,25 @@ sapply(clim, class)
 head(clim)
 ```
 ```{r}
-#use 'melt' to convert the 'clim' data.frame into long format in which 'transect' and 'site' are identifier variables, while the other are considered as the measured variables.
-clim.sea <- melt(clim, id.vars = c('transect','site'), measure.vars = 3:29)
-head(clim.sea)
+#combine 'transect' and 'site' info as a unique ID for each row
+clim$ID <- as.factor(paste(clim$transect, clim$site, sep='.'))
+row.names(clim) <- clim$ID
+
+#remove 'transect' and 'site'
+drops <- c("transect","site")
+clim <- clim[ , !(names(clim) %in% drops)]
+
+#move 'ID' to the first column
+clim <- clim %>%
+  relocate(ID)
+
+#use 'melt' to convert the 'clim' data.frame into long format in which 'ID' is identifier variable, while the other are considered as the measured variables.
+clim.me <- melt(clim, id.vars = "ID", measure.vars = 2:28)
+head(clim.me)
 ```
 ```{r}
 #use regular expression 'grepl' and 'gsub' to add 'year' column and remove date label in the 'variable' column
-clim.sea$year <- ifelse(grepl('10.11', long$variable), 
+clim.me$year <- ifelse(grepl('10.11', long$variable), 
                     'winter 10-11',
                     ifelse(grepl('11.12', long$variable), 
                            'winter 11-12',
@@ -81,12 +94,18 @@ clim.sea$year <- ifelse(grepl('10.11', long$variable),
                                                               'year 2013',
                                                               NA)))))))
 
-clim.sea <- clim.sea %>%
+clim.me <- clim.me %>%
   mutate(variable = gsub(".(\\d).*", "\\2", variable))
 
+head(clim.me)
 ```
-
-# Combine Datasets and Subset 
+```{r}
+#use 'dcast' to cast the molten data.frame into a data frame
+clim.ca <- dcast(clim.me, ID + year ~ variable)
+head(clim.ca)
+```
+# Phenology Analysis
+## Combine Datasets and Subset 
 ```{r}
 
 # Merging HB and NK phenology datasets
