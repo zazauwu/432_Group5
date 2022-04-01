@@ -5,9 +5,10 @@ date: '2022-03-22'
 output: pdf_document
 ---
 
-GitHub Link: https://github.com/zazauwu/432_Group5
+GitHub Link: <https://github.com/zazauwu/432_Group5>
 
 # Load Package
+
 ```{r}
 library(ape)
 library(tidyr)
@@ -23,6 +24,7 @@ library(dplyr)
 ```
 
 # Import Data
+
 ```{r}
 ###NK & HB lifetime reproductive success data
 ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
@@ -37,10 +39,13 @@ clim <- read.csv("./Data/HargreavesEcolLett data hobo&ibutton summary by site.cs
 ```
 
 # Climate Effect Analysis
+
 ## Data Check and Modification
+
 ```{r}
 sapply(clim, class)
 ```
+
 ```{r}
 #variable explanation:
 ##winter limited:
@@ -61,6 +66,7 @@ clim[cols.num] <- sapply(clim[cols.num],as.numeric)
 sapply(clim, class)
 head(clim)
 ```
+
 ```{r}
 #combine 'transect' and 'site' info as a unique ID for each row
 clim$ID <- as.factor(paste(clim$transect, clim$site, sep='.'))
@@ -78,21 +84,22 @@ clim <- clim %>%
 clim.me <- melt(clim, id.vars = "ID", measure.vars = 2:28)
 head(clim.me)
 ```
+
 ```{r}
 #use regular expression 'grepl' and 'gsub' to add 'year' column and remove date label in the 'variable' column
-clim.me$year <- ifelse(grepl('10.11', long$variable), 
+clim.me$year <- ifelse(grepl('10.11', clim.me$variable), 
                     'winter 10-11',
-                    ifelse(grepl('11.12', long$variable), 
+                    ifelse(grepl('11.12', clim.me$variable), 
                            'winter 11-12',
-                           ifelse(grepl('12.13', long$variable), 
+                           ifelse(grepl('12.13', clim.me$variable), 
                                   'winter 12-13',
-                                  ifelse(grepl('13.14', long$variable), 
+                                  ifelse(grepl('13.14', clim.me$variable), 
                                          'winter 13-14',
-                                         ifelse(grepl('grows.11|July.11|yr.11', long$variable), 
+                                         ifelse(grepl('grows.11|July.11|yr.11', clim.me$variable), 
                                                 'year 2011',
-                                                ifelse(grepl('grows.12|July.12|yr.12', long$variable), 
+                                                ifelse(grepl('grows.12|July.12|yr.12', clim.me$variable), 
                                                        'year 2012',
-                                                       ifelse(grepl('grows.13|July.13|yr.13', long$variable), 
+                                                       ifelse(grepl('grows.13|July.13|yr.13', clim.me$variable), 
                                                               'year 2013',
                                                               NA)))))))
 
@@ -101,12 +108,14 @@ clim.me <- clim.me %>%
 
 head(clim.me)
 ```
+
 ```{r}
 #use 'dcast' to cast the molten data.frame into a data frame
 clim.ca <- dcast(clim.me, ID + year ~ variable)
 clim.ca$year <- as.factor(clim.ca$year)
 head(clim.ca)
 ```
+
 ```{r}
 #select all rows that contains winter season info and columns related to winter
 clim.win <- subset(clim.ca, subset = year %in% c("winter 10-11", "winter 11-12", "winter 12-13", "winter 13-14"),
@@ -134,10 +143,10 @@ ggplot(data = climPDat, aes(x = Var1, y = Var2, fill = value)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
 
-
-
 # Phenology Analysis
-## Combine Datasets and Subset 
+
+## Combine Datasets and Subset
+
 ```{r}
 
 # Merging HB and NK phenology datasets
@@ -153,14 +162,10 @@ phendat <- phenmerged %>% dplyr::select(peak = transect, year, source = Source, 
 
 ```
 
-
-
-
 ## PCA
-Take phenology data and look at low v mid v high (Q2 and Q3) 
-Are low similar to each other, are mid similar, are high similar 
-Origin vs transplant location 
-Phenotypic plasticity 
+
+Take phenology data and look at low v mid v high (Q2 and Q3) Are low similar to each other, are mid similar, are high similar Origin vs transplant location Phenotypic plasticity
+
 ```{r}
 # delete rows with NA value??
 PhenoNA <- phenmerged %>%
@@ -170,17 +175,18 @@ PhenoNA <- phenmerged %>%
 ```{r}
 names(phenmerged)
 ```
+
 ```{r}
 str(phenmerged)
 ```
+
 ```{r}
 phenmerged$year <- as.factor(phenmerged$year)
 row.names(phenmerged) <- phenmerged$X
 ```
 
-
 Do plants transplanted from low-, mid-, and high- ranges vary in their ability to phenologically adapt to ranges outside their native range? (Fig. 2)
+
 ```{r}
 
 ```
-
