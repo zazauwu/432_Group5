@@ -5,6 +5,13 @@ output: html_notebook
 
 
 
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
 # Setup
 
 ```{r}
@@ -22,9 +29,11 @@ library(tibble)
 library(vegan)
 library(dplyr)
 
+setwd("~/GitHub/432_Group5/Project")
+
 # Load data
-ltrsHB <- read.csv("./HargreavesEcolLett data ltrsHB.csv")
-ltrsNK <- read.csv("./HargreavesEcolLett data ltrsNK.csv")
+ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
+ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
 
 ```
 
@@ -69,103 +78,316 @@ ltrsNK_clean <- ltrsNK %>% select(year:treat, Source:tbo, Ln.tot:totbadseed)
 # Merge datasets
 ltrsdat <- rbind(ltrsHB_clean, ltrsNK_clean)
 
+# Remove data not from High, Medium, or Low elevation 
+elevation <- c("H", "M", "L")
+ltrsdat <- ltrsdat %>% 
+  filter(Source %in% elevation)# %>% 
+  #mutate(site = recode(site, A1 = "A")) %>% # Merge site A1 and A2 data into A to simplify
+  #mutate(site = recode(site, A2 = "A")) %>% 
+  #mutate(site = recode(site, HE = "H")) # Merge site HE into H to simplify
+
 # Examine variable classes
 str(ltrsdat)
 
-```
-
-### Create Distance Matrix 
-
-```{r}
-
-# Select plant ID and physical parameters to compare similarity and create unique plant ID
-ltrs_OTU_ID <- ltrsdat %>% 
-    group_by(transect, Source, plant) %>%
+# Subset into High, Medium, and Low Source Elevation
+ltrsHigh <- ltrsdat %>% 
+    filter(Source == "H") %>% 
+    group_by(transect, site, plant) %>%
     mutate(dupID = row_number()) %>%
     ungroup() %>% 
-    mutate(plantID = paste(transect, Source, plant, dupID), sep = "_") %>% 
+    mutate(plantID = paste(transect, site, plant, dupID), sep = "_") %>% 
     select(plantID, tbo:totbadseed)
 
-# Replace column numbers with plant ID
-ltrs_OTU <- data.frame(ltrs_OTU_ID[,-1], row.names = ltrs_OTU_ID$plantID)
+ltrsMed <- ltrsdat %>% 
+    filter(Source == "M") %>% 
+    group_by(transect, site, plant) %>%
+    mutate(dupID = row_number()) %>%
+    ungroup() %>% 
+    mutate(plantID = paste(transect, site, plant, dupID), sep = "_") %>% 
+    select(plantID, tbo:totbadseed)
 
-# Build distance matrix
+ltrsLow <- ltrsdat %>% 
+    filter(Source == "L") %>% 
+    group_by(transect, site, plant) %>%
+    mutate(dupID = row_number()) %>%
+    ungroup() %>% 
+    mutate(plantID = paste(transect, site, plant, dupID), sep = "_") %>% 
+    select(plantID, tbo:totbadseed)
+
+# Replace column numbers with plantID
+ltrsH_OTU <- data.frame(ltrsHigh[,-1], row.names = ltrsHigh$plantID)
+ltrsM_OTU <- data.frame(ltrsMed[,-1], row.names = ltrsMed$plantID)
+ltrsL_OTU <- data.frame(ltrsLow[,-1], row.names = ltrsLow$plantID)
+
+
+```
+
+### Examine Dissimilarities for High Elevation Sourced Plants
+
+Create Distance Matrix
+```{r}
+
 # Create distance values
-ltrs_Dist <- dist(ltrs_OTU, method = 'euclidean')
+ltrsH_Dist <- dist(ltrsH_OTU, method = 'euclidean')
 
 # Reshape as matrix
-ltrs_DM <- as.matrix(ltrs_Dist)
+ltrsH_DM <- as.matrix(ltrsH_Dist)
 
 # Reshape to be plotted
-ltrs_plotdat <- melt(ltrs_DM)
+ltrsH_plotdat <- melt(ltrsH_DM)
 
 # Distance matrix plot
-ltrsDistMatrix <- ggplot(ltrs_plotdat, aes(x = Var1, y = Var2, fill = value)) + 
+HDM_Plot <- ggplot(ltrsH_plotdat, aes(x = Var1, y = Var2, fill = value)) + 
   geom_tile() +
   scale_fill_gradientn(colours = c("white", "blue", "green", "red")) +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_blank())
 
-ltrsDistMatrix
+HDM_Plot
 
 ```
 
-### Visualize similarities with Neighbour-joining tree
-
+Visualise similarities with Neighbour-Joining tree
 ```{r}
 # NJ method
-ltrs_tree <- nj(ltrs_Dist)
+ltrsH_tree <- nj(ltrsH_Dist)
+
 
 # Group by Source
-SourceList <- gsub("\\w+\\s+(\\w).+","\\1", ltrs_tree$tip.label)
-SourceGroup <- split(ltrs_tree$tip.label, SourceList)
-SourceTree <- groupOTU(ltrs_tree, SourceGroup)
+SourceListH <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsH_tree$tip.label)
+SourceGroupH <- split(ltrsH_tree$tip.label, SourceListH)
+SourceTreeH <- groupOTU(ltrsH_tree, SourceGroupH)
 
 # Create tree
-ltrsNJTree <- ggtree(SourceTree, layout = "circular", aes(colour = group)) +
+ltrsHNJTree <- ggtree(SourceTreeH, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
-ltrsNJTree
+ltrsHNJTree
 
 
 ```
-### Visualise dissimilarities with Bray-Cirtis Dissimilarity
+
+Visualise dissimilarities with Bray-Curtis Dissimilarity
 ```{r}
 
 # Create distance matrix and tree
-ltrs_bray <- vegdist(ltrs_OTU, method = "bray", binary = F, na.rm = T)
-ltrs_tree_bray <- nj(ltrs_bray)
+ltrsH_bray <- vegdist(ltrsH_OTU, method = "bray", binary = F, na.rm = T)
+ltrsHTree_bray <- nj(ltrsH_bray)
 
 # Group by Source
-SourceGroupBray <- split(ltrs_tree_bray$tip.label, SourceList)
-SourceTreeBray <- groupOTU(ltrs_tree_bray, SourceGroupBray)
+SourceGroupHBray <- split(ltrsHTree_bray$tip.label, SourceListH)
+SourceTreeHBray <- groupOTU(ltrsHTree_bray, SourceGroupHBray)
 
 # Create tree
-ltrsBrayTree <- ggtree(SourceTreeBray, layout = "circular", aes(colour = group)) +
+ltrsHBrayTree <- ggtree(SourceTreeHBray, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
-ltrsBrayTree
+ltrsHBrayTree
 
 ```
 
-### Examine Data with Non-metric Multidimensional Scaling NA REMOVED
 
 Set up NMDS
 ```{r}
 
-# Remove NAs from dataset
-ltrs_OTU_NA <- na.omit(ltrs_OTU)
+# Check which columns have na values
+colnames(ltrsH_OTU)[colSums(is.na(ltrsH_OTU)) > 0]
+
+# Convert aveseed to binary
+ltrsH_bin <- ltrsH_OTU %>% replace(is.na(.), 0)
+ltrsH_bin$aveseed1 = ifelse(ltrsH_bin$aveseed1 > 1, 1, 0)
+ltrsH_bin$aveseed2 = ifelse(ltrsH_bin$aveseed2 > 1, 1, 0)
 
 # Convert dataframe to matrix
-character_matrix <- as.matrix(ltrs_OTU_NA) 
+character_matrix_H <- as.matrix(ltrsH_bin) 
 
 # Perform NMDS on community data
-character_NMDS <-  metaMDS(character_matrix, k = 2, trymax = 100)
+character_NMDS_H <-  metaMDS(character_matrix_H, k = 2, trymax = 500)
 
 
 ```
+
+
+### Examine Dissimilarities for Medium Elevation Sourced Plants
+
+Create Distance Matrix
+```{r}
+
+# Create distance values
+ltrsM_Dist <- dist(ltrsM_OTU, method = 'euclidean')
+
+# Reshape as matrix
+ltrsM_DM <- as.matrix(ltrsM_Dist)
+
+# Reshape to be plotted
+ltrsM_plotdat <- melt(ltrsM_DM)
+
+# Distance matrix plot
+MDM_Plot <- ggplot(ltrsM_plotdat, aes(x = Var1, y = Var2, fill = value)) + 
+  geom_tile() +
+  scale_fill_gradientn(colours = c("white", "blue", "green", "red")) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+
+MDM_Plot
+
+```
+
+Visualise similarities with Neighbour-Joining tree
+```{r}
+# NJ method
+ltrsM_tree <- nj(ltrsM_Dist)
+
+
+# Group by Source
+SourceListM <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsM_tree$tip.label)
+SourceGroupM <- split(ltrsM_tree$tip.label, SourceListM)
+SourceTreeM <- groupOTU(ltrsM_tree, SourceGroupM)
+
+# Create tree
+ltrsMNJTree <- ggtree(SourceTreeM, layout = "circular", aes(colour = group)) +
+  geom_tiplab(size = 2, aes(angle = 0)) +
+  theme(legend.position = "right")
+
+ltrsMNJTree
+
+
+```
+
+Visualise dissimilarities with Bray-Curtis Dissimilarity
+```{r}
+
+# Create distance matrix and tree
+ltrsM_bray <- vegdist(ltrsM_OTU, method = "bray", binary = F, na.rm = T)
+ltrsMTree_bray <- nj(ltrsM_bray)
+
+# Group by Source
+SourceGroupMBray <- split(ltrsMTree_bray$tip.label, SourceListM)
+SourceTreeMBray <- groupOTU(ltrsMTree_bray, SourceGroupMBray)
+
+# Create tree
+ltrsMBrayTree <- ggtree(SourceTreeMBray, layout = "circular", aes(colour = group)) +
+  geom_tiplab(size = 2, aes(angle = 0)) +
+  theme(legend.position = "right")
+
+ltrsMBrayTree
+
+```
+
+
+Set up NMDS
+```{r}
+
+# Check which columns have na values
+colnames(ltrsM_OTU)[colSums(is.na(ltrsM_OTU)) > 0]
+
+# Convert aveseed to binary
+ltrsM_bin <- ltrsH_OTU %>% replace(is.na(.), 0)
+ltrsM_bin$aveseed1 = ifelse(ltrsM_bin$aveseed1 > 1, 1, 0)
+ltrsM_bin$aveseed2 = ifelse(ltrsM_bin$aveseed2 > 1, 1, 0)
+
+# Convert dataframe to matrix
+character_matrix_M <- as.matrix(ltrsM_bin) 
+
+# Perform NMDS on community data
+character_NMDS_M <-  metaMDS(character_matrix_M, k = 2, trymax = 500)
+
+
+```
+
+
+
+
+### Examine Dissimilarities for Low Elevation Sourced Plants
+
+Create Distance Matrix
+```{r}
+
+# Create distance values
+ltrsL_Dist <- dist(ltrsL_OTU, method = 'euclidean')
+
+# Reshape as matrix
+ltrsL_DM <- as.matrix(ltrsL_Dist)
+
+# Reshape to be plotted
+ltrsL_plotdat <- melt(ltrsL_DM)
+
+# Distance matrix plot
+LDM_Plot <- ggplot(ltrsL_plotdat, aes(x = Var1, y = Var2, fill = value)) + 
+  geom_tile() +
+  scale_fill_gradientn(colours = c("white", "blue", "green", "red")) +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+
+LDM_Plot
+
+```
+
+Visualise similarities with Neighbour-Joining tree
+```{r}
+# NJ method
+ltrsL_tree <- nj(ltrsL_Dist)
+
+
+# Group by Source
+SourceListL <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsL_tree$tip.label)
+SourceGroupL <- split(ltrsL_tree$tip.label, SourceListL)
+SourceTreeL <- groupOTU(ltrsL_tree, SourceGroupL)
+
+# Create tree
+ltrsLNJTree <- ggtree(SourceTreeL, layout = "circular", aes(colour = group)) +
+  geom_tiplab(size = 2, aes(angle = 0)) +
+  theme(legend.position = "right")
+
+ltrsLNJTree
+
+
+```
+
+Visualise dissimilarities with Bray-Curtis Dissimilarity
+```{r}
+
+# Create distance matrix and tree
+ltrsL_bray <- vegdist(ltrsL_OTU, method = "bray", binary = F, na.rm = T)
+ltrsLTree_bray <- nj(ltrsL_bray)
+
+# Group by Source
+SourceGroupLBray <- split(ltrsLTree_bray$tip.label, SourceListL)
+SourceTreeLBray <- groupOTU(ltrsLTree_bray, SourceGroupLBray)
+
+# Create tree
+ltrsLBrayTree <- ggtree(SourceTreeLBray, layout = "circular", aes(colour = group)) +
+  geom_tiplab(size = 2, aes(angle = 0)) +
+  theme(legend.position = "right")
+
+ltrsLBrayTree
+
+```
+
+
+Set up NMDS
+```{r}
+
+# Check which columns have na values
+colnames(ltrsL_OTU)[colSums(is.na(ltrsL_OTU)) > 0]
+
+# Convert aveseed to binary
+ltrsL_bin <- ltrsH_OTU %>% replace(is.na(.), 0)
+ltrsL_bin$aveseed1 = ifelse(ltrsL_bin$aveseed1 > 1, 1, 0)
+ltrsL_bin$aveseed2 = ifelse(ltrsL_bin$aveseed2 > 1, 1, 0)
+
+# Convert dataframe to matrix
+character_matrix_L <- as.matrix(ltrsL_bin) 
+
+# Perform NMDS on community data
+character_NMDS_L <-  metaMDS(character_matrix_L, k = 2, trymax = 500)
+
+
+```
+
+
 
 Visualize NMDS
 ```{r}
@@ -192,27 +414,30 @@ orditorp(character_NMDS, display = "sites", air = 0.01, cex = 1.25)
 
 ```
 
-### Examine Data with Non-metric Multidimensional Scaling BINARY ENCODE
-
-Set up NMDS
-```{r}
-
-# Check which columns have na values
-colnames(ltrs_OTU)[colSums(is.na(ltrs_OTU)) > 0]
-
-# Convert aveseed to binary
-ltrs_bin <- ltrs_OTU %>% replace(is.na(.), 0)
-ltrs_bin$aveseed1 = ifelse(ltrs_bin$aveseed1 > 1, 1, 0)
-ltrs_bin$aveseed2 = ifelse(ltrs_bin$aveseed2 > 1, 1, 0)
-
-# Convert dataframe to matrix
-character_matrix <- as.matrix(ltrs_bin) 
-
-# Perform NMDS on community data
-character_NMDS <-  metaMDS(character_matrix, k = 2, trymax = 500)
 
 
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
