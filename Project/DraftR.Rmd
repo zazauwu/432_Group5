@@ -124,14 +124,39 @@ head(clim.win)
 ```
 
 ```{r}
+ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
+  geom_point(size = 0.8, alpha = 0.8) +
+  geom_line(aes(group = ID), color = "grey", size = 0.3, alpha = 0.5) +
+  xlab("Winter 2010 - 2014") +
+  ylab("Days with Snowpack") +
+  theme_classic()
+```
+
+```{r}
 #select all rows that contains season info except for winter and columns related
 clim.not.win <- subset(clim.ca, subset = year %in% c("year 2011", "year 2012", "year 2013"),
                    select=-c(d.snowpack, Dec.FebTav, wTmin))
 head(clim.not.win)
 ```
+```{r}
+ggplot(clim.not.win, aes(x = year, y = avmaxminTJuly, color = ID)) +
+  geom_point(size = 0.8, alpha = 0.8) +
+  geom_line(aes(group = ID), color = "grey", size = 0.3, alpha = 0.5) +
+  xlab("Year 2011 - 2013") +
+  ylab("Mean July temperature (ºC)") +
+  theme_classic()
+```
+
 ## Visualize Climate Similarity/Disimilarity
 
 ### In winter starting from 2010 to 2014
+
+```{r}
+clim.win$tr.si.yr <- paste(clim.win$ID, clim.win$year)
+row.names(clim.win) <- clim.win$tr.si.yr
+clim.win <- subset(clim.win, select = -c(ID, year) )
+head(clim.win)
+```
 
 ```{r}
 climwDist <- dist(clim.win, method = 'euclidean')
@@ -148,6 +173,13 @@ ggplot(data = climwPDat, aes(x = Var1, y = Var2, fill = value)) +
 ### In other seasons except winter from 2011 to 2013
 
 ```{r}
+clim.not.win$tr.si.yr <- paste(clim.not.win$ID, clim.not.win$year)
+row.names(clim.not.win) <- clim.not.win$tr.si.yr
+clim.not.win <- subset(clim.not.win, select = -c(ID, year) )
+head(clim.not.win)
+```
+
+```{r}
 climnwDist <- dist(clim.not.win, method = 'euclidean')
 climnwDistMat <- as.matrix(climnwDist)
 # rearrange the data from an n×n matrix to a n2×3 matrix
@@ -162,8 +194,6 @@ ggplot(data = climnwPDat, aes(x = Var1, y = Var2, fill = value)) +
 
 # Phenology Analysis
 
-Do plants transplanted from low-, mid-, and high- ranges vary in their ability to phenologically adapt to ranges outside their native range?
-
 ## Combine Datasets and Subset
 
 ```{r}
@@ -177,8 +207,7 @@ phenmerged <- rbind(phenNK, phenHB)
 phendat <- phenmerged %>% dplyr::select(peak = transect, year, source = Source, site, treatment = treat, 
                                         final_fate = final.fate, DEm_plotavg = DEm.estplotav)
 
-
-
+head(phendat)
 ```
 
 ## PCA
