@@ -19,6 +19,8 @@ library(reshape2)
 library(grid)
 library(gridExtra)
 library(ggfortify)
+library(vegan)
+library(ggtree)
 library(dplyr)
 
 ```
@@ -262,12 +264,12 @@ str(ltrsdat)
 ```
 
 ```{r}
-ltrsdat$year <- as.factor(ltrsdat$year)
-ltrsdat$transect <- as.factor(ltrsdat$transect)
-ltrsdat$site <- as.factor(ltrsdat$site)
-ltrsdat$treat <- as.factor(ltrsdat$treat)
-ltrsdat$Source <- as.factor(ltrsdat$Source)
-ltrsdat$tbo <- as.factor(ltrsdat$tbo)
+#ltrsdat$year <- as.factor(ltrsdat$year)
+#ltrsdat$transect <- as.factor(ltrsdat$transect)
+#ltrsdat$site <- as.factor(ltrsdat$site)
+#ltrsdat$treat <- as.factor(ltrsdat$treat)
+#ltrsdat$Source <- as.factor(ltrsdat$Source)
+#ltrsdat$tbo <- as.factor(ltrsdat$tbo)
 ```
 
 
@@ -339,12 +341,12 @@ ltrsH_tree <- nj(ltrsH_Dist)
 
 
 # Group by Source
-SourceListH <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsH_tree$tip.label)
-SourceGroupH <- split(ltrsH_tree$tip.label, SourceListH)
-SourceTreeH <- groupOTU(ltrsH_tree, SourceGroupH)
+SiteListH <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsH_tree$tip.label)
+SiteGroupH <- split(ltrsH_tree$tip.label, SiteListH)
+SiteTreeH <- groupOTU(ltrsH_tree, SiteGroupH)
 
 # Create tree
-ltrsHNJTree <- ggtree(SourceTreeH, layout = "circular", aes(colour = group)) +
+ltrsHNJTree <- ggtree(SiteTreeH, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
@@ -361,11 +363,11 @@ ltrsH_bray <- vegdist(ltrsH_OTU, method = "bray", binary = F, na.rm = T)
 ltrsHTree_bray <- nj(ltrsH_bray)
 
 # Group by Source
-SourceGroupHBray <- split(ltrsHTree_bray$tip.label, SourceListH)
-SourceTreeHBray <- groupOTU(ltrsHTree_bray, SourceGroupHBray)
+SiteGroupHBray <- split(ltrsHTree_bray$tip.label, SiteListH)
+SiteTreeHBray <- groupOTU(ltrsHTree_bray, SiteGroupHBray)
 
 # Create tree
-ltrsHBrayTree <- ggtree(SourceTreeHBray, layout = "circular", aes(colour = group)) +
+ltrsHBrayTree <- ggtree(SiteTreeHBray, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
@@ -406,12 +408,12 @@ ltrsM_tree <- nj(ltrsM_Dist)
 
 
 # Group by Source
-SourceListM <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsM_tree$tip.label)
-SourceGroupM <- split(ltrsM_tree$tip.label, SourceListM)
-SourceTreeM <- groupOTU(ltrsM_tree, SourceGroupM)
+SiteListM <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsM_tree$tip.label)
+SiteGroupM <- split(ltrsM_tree$tip.label, SiteListM)
+SiteTreeM <- groupOTU(ltrsM_tree, SiteGroupM)
 
 # Create tree
-ltrsMNJTree <- ggtree(SourceTreeM, layout = "circular", aes(colour = group)) +
+ltrsMNJTree <- ggtree(SiteTreeM, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
@@ -428,11 +430,11 @@ ltrsM_bray <- vegdist(ltrsM_OTU, method = "bray", binary = F, na.rm = T)
 ltrsMTree_bray <- nj(ltrsM_bray)
 
 # Group by Source
-SourceGroupMBray <- split(ltrsMTree_bray$tip.label, SourceListM)
-SourceTreeMBray <- groupOTU(ltrsMTree_bray, SourceGroupMBray)
+SiteGroupMBray <- split(ltrsMTree_bray$tip.label, SiteListM)
+SiteTreeMBray <- groupOTU(ltrsMTree_bray, SiteGroupMBray)
 
 # Create tree
-ltrsMBrayTree <- ggtree(SourceTreeMBray, layout = "circular", aes(colour = group)) +
+ltrsMBrayTree <- ggtree(SiteTreeMBray, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
@@ -473,12 +475,12 @@ ltrsL_tree <- nj(ltrsL_Dist)
 
 
 # Group by Source
-SourceListL <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsL_tree$tip.label)
-SourceGroupL <- split(ltrsL_tree$tip.label, SourceListL)
-SourceTreeL <- groupOTU(ltrsL_tree, SourceGroupL)
+SiteListL <- gsub("\\w+\\s+(\\w+)\\s.*","\\1", ltrsL_tree$tip.label)
+SiteGroupL <- split(ltrsL_tree$tip.label, SiteListL)
+SiteTreeL <- groupOTU(ltrsL_tree, SiteGroupL)
 
 # Create tree
-ltrsLNJTree <- ggtree(SourceTreeL, layout = "circular", aes(colour = group)) +
+ltrsLNJTree <- ggtree(SiteTreeL, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
@@ -496,11 +498,11 @@ ltrsL_bray <- vegdist(ltrsL_OTU, method = "bray", binary = F, na.rm = T)
 ltrsLTree_bray <- nj(ltrsL_bray)
 
 # Group by Source
-SourceGroupLBray <- split(ltrsLTree_bray$tip.label, SourceListL)
-SourceTreeLBray <- groupOTU(ltrsLTree_bray, SourceGroupLBray)
+SiteGroupLBray <- split(ltrsLTree_bray$tip.label, SiteListL)
+SiteTreeLBray <- groupOTU(ltrsLTree_bray, SiteGroupLBray)
 
 # Create tree
-ltrsLBrayTree <- ggtree(SourceTreeLBray, layout = "circular", aes(colour = group)) +
+ltrsLBrayTree <- ggtree(SiteTreeLBray, layout = "circular", aes(colour = group)) +
   geom_tiplab(size = 2, aes(angle = 0)) +
   theme(legend.position = "right")
 
