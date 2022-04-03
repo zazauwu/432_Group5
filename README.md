@@ -9,8 +9,17 @@ Edge populations of plants may be able to expand species’ ranges if they are a
 
 ## Hypothesis with predicted figures:
 This project aims to investigate the following questions:
+**1.** Do sites sampled at different elevation from NK and HB vary in climate?
+![climate variation](https://github.com/zazauwu/432_Group5/blob/main/Image/ClimateVariation.png)
 
-3. Do plants transplanted to warmer ranged seed earlier than plants in cooler ranges, and does this change between NK and HB?
+**2.** Do transplanted plants vary in their lifetime reproductive success between site and treatment?
+![ltrs by site and treatment](https://)
+
+**3.** Do plants transplanted to warmer ranged seed earlier than plants in cooler ranges, and does this change between NK and HB?
 ![seed emergence by transect](https://github.com/zazauwu/432_Group5/blob/main/Image/SeedEmergence.PNG) 
+***
+## Workflow:
 
-## Workflow
+***
+## References:
+Hargreaves, Anna L.; Eckert, Chris G.; Eckert, Christopher G. (2018), Data from: Local adaptation primes cold-edge populations for range expansion but not warming-induced range shifts, Dryad, Dataset, https://doi.org/10.5061/dryad.3bd420c
