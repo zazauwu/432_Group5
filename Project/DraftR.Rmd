@@ -132,8 +132,6 @@ ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
   theme_classic()
 ```
 
-Figure 1.
-
 ```{r}
 #select all rows that contains season info except for winter and columns related
 clim.not.win <- subset(clim.ca, subset = year %in% c("year 2011", "year 2012", "year 2013"),
