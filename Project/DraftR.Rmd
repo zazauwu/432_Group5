@@ -1,6 +1,6 @@
 ---
 title: "Project"
-author: "Group5"
+author: "Alyssa Reynolds, Zhijun Li, Runzi Qi"
 date: '2022-03-22'
 output: pdf_document
 ---
@@ -131,6 +131,7 @@ ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
   ylab("Days with Snowpack") +
   theme_classic()
 ```
+Figure 1. Comparison of the total days with snowpack in winter among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change in days across years.
 
 ```{r}
 #select all rows that contains season info except for winter and columns related
@@ -147,6 +148,7 @@ ggplot(clim.not.win, aes(x = year, y = avmaxminTJuly, color = ID)) +
   ylab("Mean July temperature (ºC)") +
   theme_classic()
 ```
+Figure 2. Comparison of the mean July temperature (°C) among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change across years from 2011 to 2013.
 
 ## Visualize Climate Similarity/Disimilarity
 
@@ -514,7 +516,7 @@ MidLeafPlot <- ggplot(MidPlotDat, aes(x = site, y = Ln.tot, fill = treat)) +
   scale_fill_discrete(name = "Treatment", labels = c("Warmed", "Control")) +
   ggtitle("Leaf growth of mid-elevation sourced plants") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 5),
         plot.title = element_text(hjust = 0.5))
 
 MidLeafPlot
@@ -532,7 +534,7 @@ HighLeafPlot <- ggplot(HighPlotDat, aes(x = site, y = Ln.tot, fill = treat)) +
                       labels = c("Warmed", "Control")) +
   ggtitle("Leaf growth of high elevation sourced plants") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 5),
         plot.title = element_text(hjust = 0.5))
 
 HighLeafPlot
@@ -560,7 +562,7 @@ MidFruitPlot <- ggplot(MidPlotDat, aes(x = site, y = Fr.tot, fill = treat)) +
   scale_fill_discrete(name = "Treatment", labels = c("Warmed", "Control")) +
   ggtitle("Fruit development of mid-elevation sourced plants") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 5),
         plot.title = element_text(hjust = 0.5))
 
 MidFruitPlot
@@ -578,7 +580,7 @@ HighFruitPlot <- ggplot(HighPlotDat, aes(x = site, y = Fr.tot, fill = treat)) +
                       labels = c("Warmed", "Control")) +
   ggtitle("Fruit development of high elevation sourced plants") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 5),
         plot.title = element_text(hjust = 0.5))
 
 
@@ -608,7 +610,7 @@ MidSeedPlot <- ggplot(MidPlotDat, aes(x = site, y = propgoodseed, fill = treat))
   scale_fill_discrete(name = "Treatment", labels = c("Warmed", "Control")) +
   ggtitle("Seed viability of mid-elevation sourced plants") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 5),
         plot.title = element_text(hjust = 0.5))
 
 MidSeedPlot
@@ -627,7 +629,7 @@ HighSeedPlot <- ggplot(HighPlotDat, aes(x = site, y = propgoodseed, fill = treat
                       labels = c("Warmed", "Control")) +
   ggtitle("Seed viability of high elevation sourced plants") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 5),
         plot.title = element_text(hjust = 0.5))
 
 HighSeedPlot
