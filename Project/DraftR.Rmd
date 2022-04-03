@@ -131,6 +131,7 @@ ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
   ylab("Days with Snowpack") +
   theme_classic()
 ```
+Figure 1. 
 
 ```{r}
 #select all rows that contains season info except for winter and columns related
@@ -226,21 +227,5 @@ names(phenmerged)
 
 ```{r}
 str(phenmerged)
-```
-
-```{r}
-phenmerged$year <- as.factor(phenmerged$year)
-row.names(phenmerged) <- phenmerged$X
-```
-## plot
-
-```{r}
-
-```
-
-## Visualize Similarity
-
-```{r}
-
 ```
 
