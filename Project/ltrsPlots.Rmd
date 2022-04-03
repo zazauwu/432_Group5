@@ -1,0 +1,236 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## What is already coded
+```{r}
+library(ape)
+library(tidyr)
+library(MASS)
+library(MuMIn)
+library(ggplot2)
+library(reshape2)
+library(grid)
+library(gridExtra)
+library(ggfortify)
+library(vegan)
+library(ggtree)
+library(dplyr)
+
+###NK & HB lifetime reproductive success data
+ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
+ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
+
+```
+
+```{r}
+# Select variables
+ltrsHB_clean <- ltrsHB %>% select(year:treat, Source:totbadseed)
+ltrsNK_clean <- ltrsNK %>% select(year:treat, Source:tbo, Ln.tot:totbadseed)
+
+# Merge datasets
+ltrsdat <- rbind(ltrsHB_clean, ltrsNK_clean)
+
+# Remove data not from High, Medium, or Low elevation 
+elevation <- c("H", "M", "L")
+ltrsdat <- ltrsdat %>% 
+  filter(Source %in% elevation)
+
+# Examine variable classes
+str(ltrsdat)
+
+```
+
+
+## New Code for Plots
+
+Compare Leaf nodes between treatments
+```{r}
+
+# Create plot data
+ltrsPlotDat <- ltrsdat %>% mutate(propgoodseed = totgoodseed/(totbadseed + totgoodseed)) %>% 
+  select(Source, site, treat, Ln.tot, Fr.tot, propgoodseed)
+
+# Reorder sites
+ltrsPlotDat$site <- factor(ltrsPlotDat$site , levels = c("L", "M", "H", "HE", "A", "A1", "A2"))
+
+# Filter for mid and high elevations
+MidPlotDat <- ltrsPlotDat %>%  filter(Source == "M")
+HighPlotDat <- ltrsPlotDat %>%  filter(Source == "H")
+
+
+# Mid Elevation Source Plot
+# Create Mid Elevation plot
+MidLeafPlot <- ggplot(MidPlotDat, aes(x = site, y = Ln.tot, fill = treat)) +
+  geom_boxplot(width = 0.5) +
+  scale_x_discrete(name = "\n Transplant site", 
+                   labels = c("Low elevation", "Mid-elevation", "High elevation", 
+                              "High elevation range edge", "Above range HB",
+                              "First site above range NK", "Second site above range NK")) +
+  scale_y_continuous(name = "Total leaf nodes \n")+
+  scale_fill_discrete(name = "Treatment", labels = c("Warmed", "Control")) +
+  ggtitle("Leaf growth of mid-elevation sourced plants") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+        plot.title = element_text(hjust = 0.5))
+
+MidLeafPlot
+
+# High Elevation Source Plot
+# Create Mid Elevation plot
+HighLeafPlot <- ggplot(HighPlotDat, aes(x = site, y = Ln.tot, fill = treat)) +
+  geom_boxplot(width = 0.5) +
+  scale_x_discrete(name = "\n Transplant site", 
+                   labels = c("Low elevation", "Mid-elevation", "High elevation", 
+                              "High elevation range edge", "Above range HB",
+                              "First site above range NK", "Second site above range NK")) +
+  scale_y_continuous(name = "Total leaf nodes \n")+
+  scale_fill_discrete(name = "Treatment", 
+                      labels = c("Warmed", "Control")) +
+  ggtitle("Leaf growth of high elevation sourced plants") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+        plot.title = element_text(hjust = 0.5))
+
+HighLeafPlot
+
+
+
+```
+
+Compare fruits between treatments
+```{r}
+
+# Mid Elevation Source Plot
+# Create Mid Elevation plot
+MidFruitPlot <- ggplot(MidPlotDat, aes(x = site, y = Fr.tot, fill = treat)) +
+  geom_boxplot(width = 0.5) +
+  scale_x_discrete(name = "\n Transplant site", 
+                   labels = c("Low elevation", "Mid-elevation", "High elevation", 
+                              "High elevation range edge", "Above range HB",
+                              "First site above range NK", "Second site above range NK")) +
+  scale_y_continuous(name = "Total fruits from all stems \n")+
+  scale_fill_discrete(name = "Treatment", labels = c("Warmed", "Control")) +
+  ggtitle("Fruit development of mid-elevation sourced plants") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+        plot.title = element_text(hjust = 0.5))
+
+MidFruitPlot
+
+# High Elevation Source Plot
+# Create Mid Elevation plot
+HighFruitPlot <- ggplot(HighPlotDat, aes(x = site, y = Fr.tot, fill = treat)) +
+  geom_boxplot(width = 0.5) +
+  scale_x_discrete(name = "\n Transplant site", 
+                   labels = c("Low elevation", "Mid-elevation", "High elevation", 
+                              "High elevation range edge", "Above range HB",
+                              "First site above range NK", "Second site above range NK")) +
+  scale_y_continuous(name = "Total fruits from all stems \n")+
+  scale_fill_discrete(name = "Treatment", 
+                      labels = c("Warmed", "Control")) +
+  ggtitle("Fruit development of high elevation sourced plants") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+        plot.title = element_text(hjust = 0.5))
+
+
+HighFruitPlot
+
+
+```
+
+
+Compare total good seeds between sites for each source
+```{r}
+
+# Mid Elevation Source Plot
+# Create Mid Elevation plot
+MidSeedPlot <- ggplot(MidPlotDat, aes(x = site, y = propgoodseed, fill = treat)) +
+  geom_boxplot(width = 0.5) +
+  scale_x_discrete(name = "\n Transplant site", 
+                   labels = c("Low elevation", "Mid-elevation", "High elevation", 
+                              "High elevation range edge", "Above range HB",
+                              "First site above range NK", "Second site above range NK")) +
+  scale_y_continuous(labels = scales::percent, 
+                     name = "Percentage of viable seeds produced by plant \n")+
+  scale_fill_discrete(name = "Treatment", labels = c("Warmed", "Control")) +
+  ggtitle("Seed viability of mid-elevation sourced plants") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+        plot.title = element_text(hjust = 0.5))
+
+MidSeedPlot
+
+# High Elevation Source Plot
+# Create Mid Elevation plot
+HighSeedPlot <- ggplot(HighPlotDat, aes(x = site, y = propgoodseed, fill = treat)) +
+  geom_boxplot(width = 0.5) +
+  scale_x_discrete(name = "\n Transplant site", 
+                   labels = c("Low elevation", "Mid-elevation", "High elevation", 
+                              "High elevation range edge", "Above range HB",
+                              "First site above range NK", "Second site above range NK")) +
+  scale_y_continuous(labels = scales::percent,
+                     name = "Percentage of viable seeds produced by plant \n")+
+  scale_fill_discrete(name = "Treatment", 
+                      labels = c("Warmed", "Control")) +
+  ggtitle("Seed viability of high elevation sourced plants") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 7),
+        plot.title = element_text(hjust = 0.5))
+
+HighSeedPlot
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
