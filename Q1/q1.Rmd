@@ -1,0 +1,65 @@
+---
+title: "warmTreat"
+author: "RicardoQi"
+date: '2022-04-02'
+output: html_document
+---
+This code is written by Runzi Qi from Group 5 to determine that do plants transplanted to warmer ranged seed earlier than plants in cooler ranges, and does this change between NK and HB. 
+
+***
+## Data import
+the package ggplot() is loaded for future use of plots, and csv file of experiment data is imported.
+```{r}
+library(ggplot2)
+library(cowplot)
+
+HB <- read.csv("C:\\Users\\qi199\\Documents\\432_Group5\\Project\\Data\\HargreavesEcolLett data prop&LTFHB.csv")
+NK <- read.csv("C:\\Users\\qi199\\Documents\\432_Group5\\Project\\Data\\HargreavesEcolLett data prop&LTFNK.csv")
+```
+***
+## Seed emergence vs. Range
+The first section of plot is created to show the potential relationship between seed emergence(nEmzt) and range of plant habitats. 
+```{r}
+#plot for HB created
+HB_1 <- ggplot(HB, 
+       aes(x = Source, 
+           fill = nEmzt)) + 
+  geom_bar(position = position_dodge(width=0.8))+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)+
+  ylab("Seed emergence (# of nEmzt)")
+#plot for NK created
+NK_1 <- ggplot(NK, 
+       aes(x = Source, 
+           fill = nEmzt)) + 
+  geom_bar(position = position_dodge(width=0.8))+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)+
+  ylab("")+
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+Then, two plots are arranged side-to-side for the purpose of comparison.
+```{r}
+plot_grid(HB_1, NK_1, labels = c('HB','NK'), ncol=2)
+```
+
+As seen in the plot, there is an obvious increase in the number of plant emergence at source E, which stands for the absolute high-elevation range edge, in NK comparing to HB. Increase in plant emergence are also seen in F (Fortress Mountain), L (low-elevation from that transet), and MT (neighbouring Moose Mountain above 2000m).
+
+***
+## Group by transplant location
+In this section, groups are categorized by transplant location (“treat”, control or warming chambers) using similar codes above.
+```{r}
+HB_2 <- ggplot(HB, aes(treat))+
+  geom_bar()+
+  scale_y_continuous(limits=c(0, 600))+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)
+
+NK_2 <- ggplot(NK, aes(treat))+
+  geom_bar()+
+  ylab("")+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)+
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+plot_grid(HB_2, NK_2, labels = c('HB','NK'), ncol=2)
+```
+
+According to plots generated above indicates that the controlled normal plant population (TR) has greater number comparing to the ones within the Open topped warming chambers (OTC). When comparing the count number between HB and NK, both treats increase by approximately 40. Therefore, it is predicted that plants from higher elevations transplanted to warmer ranges will seed earlier. Plants from lower elevations transplanted to cooler ranges will seed later.
