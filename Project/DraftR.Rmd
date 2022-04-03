@@ -22,22 +22,22 @@ library(ggfortify)
 library(vegan)
 library(ggtree)
 library(dplyr)
-
+library(cowplot)
 ```
 
 # Import Data
 
 ```{r}
+###Climate by site data
+clim <- read.csv("./Data/HargreavesEcolLett data hobo&ibutton summary by site.csv")
+
 ###NK & HB lifetime reproductive success data
 ltrsHB <- read.csv("./Data/HargreavesEcolLett data ltrsHB.csv")
 ltrsNK <- read.csv("./Data/HargreavesEcolLett data ltrsNK.csv")
 
-###NK & HB phenology data
-phenNK <- read.csv("./Data/HargreavesEcolLett data phenologyNK.csv")
-phenHB <- read.csv("./Data/HargreavesEcolLett data phenologyHB.csv")
-
-###Climate by site data
-clim <- read.csv("./Data/HargreavesEcolLett data hobo&ibutton summary by site.csv")
+###NK & HB Performance data per subplot
+proHB <- read.csv("./Data/HargreavesEcolLett data prop&LTFHB.csv")
+proNK <- read.csv("./Data/HargreavesEcolLett data prop&LTFNK.csv")
 ```
 
 # Climate Effect Analysis
@@ -48,20 +48,18 @@ clim <- read.csv("./Data/HargreavesEcolLett data hobo&ibutton summary by site.cs
 sapply(clim, class)
 ```
 
-```{r}
-#variable explanation:
-##winter limited:
-  #d.snowpack.10.11 = days with snowpack winter 2010-2011
-  #wTmin.10.11 = minimum temperature winter (C) at plant height 2010-2011
-  #Dec.FebTav.10.11 = mean temperature at plant height from Dec1st 2010 - Feb 28th 2011
-##
-  #d.grows.11 = # days in growing season 2011 (start / end of gorwing season determined by sustained snow or frost)
-  #GDD.grows.11 = # growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011
-  #GDD.yr.11 = # growing degree days in 2011 (ie not truncated to estimated growing season)
-  #avmaxminTJuly.11 = mean July 2011 temperature (C) calculated from daily min and max T: 
-      ##mean(July1stmin + July1stmax + July2ndmin + July2ndmax + ... July31stmi + July31stmax)
-  #avTJuly.11 = mean July 2011 temperature (C) calculated from raw data (ie >2 measurements per day)
+### Description of the variables: 
+\n 
+**d.snowpack.10.11** = days with snowpack winter 2010-2011 
+**wTmin.10.11** = minimum temperature winter (C) at plant height 2010-2011 
+**Dec.FebTav.10.11** = mean temperature at plant height from Dec1st 2010 - Feb 28th 2011 
+**d.grows.11** = \# days in growing season 2011 (start / end of gorwing season determined by sustained snow or frost) **GDD.grows.11** = \# growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011 
+**GDD.yr.11** = \# growing degree days in 2011 (ie not truncated to estimated growing season) 
+**avmaxminTJuly.11** = mean July 2011 temperature (C) calculated from daily min and max T: 
+mean(July1stmin + July1stmax + July2ndmin + July2ndmax + ... July31stmi + July31stmax) 
+**avTJuly.11** = mean July 2011 temperature (C) calculated from raw data (ie \>2 measurements per day)
 
+```{r}
 #hence, convert the above columns into numeric variables
 cols.num <- c("d.snowpack.11.12", "wTmin.11.12", "Dec.FebTav.11.12", "d.grows.12", "GDD.grows.12", "GDD.yr.12", "avmaxminTJuly.12", "avTJuly.12", "GDD.grows.13", "GDD.yr.13", "avmaxminTJuly.13", "avTJuly.13", "d.snowpack.13.14", "wTmin.13.14", "Dec.FebTav.13.14")
 clim[cols.num] <- sapply(clim[cols.num],as.numeric)
@@ -133,7 +131,8 @@ ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
   ylab("Days with Snowpack") +
   theme_classic()
 ```
-Figure 1. 
+
+Figure 1.
 
 ```{r}
 #select all rows that contains season info except for winter and columns related
@@ -141,6 +140,7 @@ clim.not.win <- subset(clim.ca, subset = year %in% c("year 2011", "year 2012", "
                    select=-c(d.snowpack, Dec.FebTav, wTmin))
 head(clim.not.win)
 ```
+
 ```{r}
 ggplot(clim.not.win, aes(x = year, y = avmaxminTJuly, color = ID)) +
   geom_point(size = 0.8, alpha = 0.8) +
@@ -173,6 +173,7 @@ ggplot(data = climwPDat, aes(x = Var1, y = Var2, fill = value)) +
   scale_fill_gradientn(colours = c("white","blue","green","red")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
+
 ### In other seasons except winter from 2011 to 2013
 
 ```{r}
@@ -195,51 +196,24 @@ ggplot(data = climnwPDat, aes(x = Var1, y = Var2, fill = value)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
 
-# Phenology Analysis
 
-## Combine Datasets and Subset
-
-```{r}
-
-# Merging HB and NK phenology datasets
-
-phenmerged <- rbind(phenNK, phenHB)
-
-# Subset phendat to variable we want
-
-phendat <- phenmerged %>% dplyr::select(peak = transect, year, source = Source, site, treatment = treat, 
-                                        final_fate = final.fate, DEm_plotavg = DEm.estplotav)
-
-head(phendat)
-```
 # Lifetime Reproductive Success Similiarity Analysis
 
-Description of the variables:
-\n
-**year** = year plants were active
-**transect** = elevational transect (where NK = Nakiska and HB = Hailstone Butte)
-**site** = site seeds were transplanted into. L = low elevation, M = mid-elevation (range centre),
-H = high-elevation (~100 m below range edge), E or HE = high-elevation range edge, A = above
-range (HB), A1 = 1st site above the range at NK, A2 = second site above the range at NK
-**treat** = treatment in warming experiment. TR = normal transplant (control), OTC = Open topped
-warming chambers (warmed), dormant = plants found > 1 year after seeds planted
-**Source** = source population: low-elevation from that transet (L), mid-elevation from that transect
-(M), high-elevation (within 100 masl of absolute high-elevation range edge) from that transect
-(H), edge (absolute high-elevation range edge E), high-elevation (2000 m) populations on
-neighbouring Moose Mountain (MT) and Fortress Mountain (F), and seeds produced by plants
-transplanted above the range the previous year (A)
-**plant** = plantID within each 5x5 subplot (row.column from 1.1 = topleft plant to 5.5 = bottom right
-plant)
-**tbo** = top bitten off by mammal. 0 = no, plant intact, 1 = top bitten off
-the primary stem, 2 = top bitten off some secondary stalks but primary stem intact
-**Ln.tot** = total leaf nodes (each leaf node produces 2 leaves), including primary, secondary and
-tertiary stems
+### Description of the variables: 
+\n 
+**year** = year plants were active 
+**transect** = elevational transect (where NK = Nakiska and HB = Hailstone Butte) 
+**site** = site seeds were transplanted into. L = low elevation, M = mid-elevation (range centre), H = high-elevation (\~100 m below range edge), E or HE = high-elevation range edge, A = above range (HB), A1 = 1st site above the range at NK, A2 = second site above the range at NK 
+**treat** = treatment in warming experiment. TR = normal transplant (control), OTC = Open topped warming chambers (warmed), dormant = plants found \> 1 year after seeds planted 
+**Source** = source population: low-elevation from that transet (L), mid-elevation from that transect (M), high-elevation (within 100 masl of absolute high-elevation range edge) from that transect (H), edge (absolute high-elevation range edge E), high-elevation (2000 m) populations on neighbouring Moose Mountain (MT) and Fortress Mountain (F), and seeds produced by plants transplanted above the range the previous year (A) 
+**plant** = plantID within each 5x5 subplot (row.column from 1.1 = topleft plant to 5.5 = bottom right plant) 
+**tbo** = top bitten off by mammal. 0 = no, plant intact, 1 = top bitten off the primary stem, 2 = top bitten off some secondary stalks but primary stem intact 
+**Ln.tot** = total leaf nodes (each leaf node produces 2 leaves), including primary, secondary and tertiary stems 
 **Fr.tot** = total fruits from all stems
-**aveseed1** = average number of seeds per fruit from primary stem fruits
-**aveseed2** = average number of seeds per fruit from secondary stem fruits
+**aveseed1** = average number of seeds per fruit from primary stem fruits 
+**aveseed2** = average number of seeds per fruit from secondary stem fruits 
 **totgoodseed** = total viable seed produced by the plant 
 **totbadseed** = total non-viable seed produced by the plant
-
 
 ## Tidy Data
 
@@ -259,7 +233,6 @@ ltrsdat <- ltrsdat %>%
 # Examine variable classes
 str(ltrsdat)
 ```
-
 
 ```{r}
 # Subset into High, Medium, and Low Source Elevation
@@ -341,8 +314,8 @@ ltrsHNJTree <- ggtree(SiteTreeH, layout = "circular", aes(colour = group)) +
 ltrsHNJTree
 
 ```
-It appears that plants sourced from high elevations do not have clear similarities when transplanted to similar sites.
 
+It appears that plants sourced from high elevations do not have clear similarities when transplanted to similar sites.
 
 ## Visualise dissimilarities with Bray-Curtis Dissimilarity
 
@@ -364,8 +337,8 @@ ltrsHBrayTree <- ggtree(SiteTreeHBray, layout = "circular", aes(colour = group))
 ltrsHBrayTree
 
 ```
-The Bray-Curtis Dissimilarity tree shows more distinct branches, and one that is notably bluer in hue, indicating that at least some high elevation sourced plants share characteristics when transplanted to high elevation or high elevation range edge sites. However, there still appears to be a through mixing of plant characters.
 
+The Bray-Curtis Dissimilarity tree shows more distinct branches, and one that is notably bluer in hue, indicating that at least some high elevation sourced plants share characteristics when transplanted to high elevation or high elevation range edge sites. However, there still appears to be a through mixing of plant characters.
 
 ## Examine Dissimilarities for Medium Elevation Sourced Plants
 
@@ -414,6 +387,7 @@ ltrsMNJTree
 
 
 ```
+
 It appears that plants sourced from mid-elevations do not have clear similarities when transplanted to similar sites.
 
 ## Visualise dissimilarities with Bray-Curtis Dissimilarity
@@ -436,6 +410,7 @@ ltrsMBrayTree <- ggtree(SiteTreeMBray, layout = "circular", aes(colour = group))
 ltrsMBrayTree
 
 ```
+
 There appears to be a thorough mixing of plant characters across sites, indicating that mid-elevation sourced plants transplanted to similar sites do not have similar characters.
 
 ## Examine Dissimilarities for Low Elevation Sourced Plants
@@ -485,6 +460,7 @@ ltrsLNJTree
 
 
 ```
+
 It appears that plants sourced from low elevations do not have clear similarities when transplanted to similar sites.
 
 ## Visualise dissimilarities with Bray-Curtis Dissimilarity
@@ -507,11 +483,13 @@ ltrsLBrayTree <- ggtree(SiteTreeLBray, layout = "circular", aes(colour = group))
 ltrsLBrayTree
 
 ```
+
 While this Bray-Curtis Dissimilarity tree does show mixing of site traits across the tree, there are branches that are more distinctly coloured. This indicates that some low elevation sourced plants may maintain similar characteristics when transplanted to similar sites.
 
 ## Compare lifetime reproductive success between treatments across sites
 
-Compare leaf nodes between treatments
+### Compare leaf nodes between treatments
+
 ```{r}
 
 # Create plot data
@@ -563,12 +541,13 @@ HighLeafPlot
 
 
 ```
-The boxplot showing leaf growth data for mid-elevation plants appears to show that some differences do exist for plants transplanted to mid-elevation and high elevation sites. Mid-elevation to mid-elevation plants appear to have decreased leaf growth in warming chambers compared to the control, indicating that the conditions for growth are not within the species optimal. Conversely, mid-elevation plants transplanted to high elevation with warming showed higher levels of leaf growth than the control, likely due to the warming chamber producing a temperature closer to their native range.
-The boxplot showing leaf growth data for high elevation plants appears to show that there may have been a difference in leaf growth for high elevation sourced plants transplanted to mid-elevation sites. When placed in a warming chamber, these plants appear to have slightly elevated levels of leaf growth compared to the control, however there is a high degree of variability.
+
+The boxplot showing leaf growth data for mid-elevation plants appears to show that some differences do exist for plants transplanted to mid-elevation and high elevation sites. Mid-elevation to mid-elevation plants appear to have decreased leaf growth in warming chambers compared to the control, indicating that the conditions for growth are not within the species optimal. Conversely, mid-elevation plants transplanted to high elevation with warming showed higher levels of leaf growth than the control, likely due to the warming chamber producing a temperature closer to their native range. The boxplot showing leaf growth data for high elevation plants appears to show that there may have been a difference in leaf growth for high elevation sourced plants transplanted to mid-elevation sites. When placed in a warming chamber, these plants appear to have slightly elevated levels of leaf growth compared to the control, however there is a high degree of variability.
 
 \n
 
-Compare fruits between treatments
+### Compare fruits between treatments
+
 ```{r}
 
 # Mid Elevation Source Plot
@@ -609,12 +588,13 @@ HighFruitPlot
 
 
 ```
-Similar to the pattern observed in leaf growth of mid-elevation plants transplanted to mid- and high elevation sites, mid-elevation plants transplanted to mid- and high elevation sites show possible differences in fruit development. Possibly as a result of growing in elevated temperatures outside of the plant's native range, plants transplanted to mid-elevation warming chambers appear to have decreased fruit growth compared to controls. Plants transplanted to high elevation appear to have a much higher amount of fruits on average, possibly due to being grown in a more optimal temperature range.
-The boxplot showing fruit development for high elevation sourced plants appears to not illustrate many differences between sites or between treated groups and controls. The largest difference appears to be in plants transplanted above the range at Hailstone Butte, but this may be the result of a lack of data at that site.
+
+Similar to the pattern observed in leaf growth of mid-elevation plants transplanted to mid- and high elevation sites, mid-elevation plants transplanted to mid- and high elevation sites show possible differences in fruit development. Possibly as a result of growing in elevated temperatures outside of the plant's native range, plants transplanted to mid-elevation warming chambers appear to have decreased fruit growth compared to controls. Plants transplanted to high elevation appear to have a much higher amount of fruits on average, possibly due to being grown in a more optimal temperature range. The boxplot showing fruit development for high elevation sourced plants appears to not illustrate many differences between sites or between treated groups and controls. The largest difference appears to be in plants transplanted above the range at Hailstone Butte, but this may be the result of a lack of data at that site.
 
 \n
 
-Compare proportion of good seeds between sites for each source
+### Compare proportion of good seeds between sites for each source
+
 ```{r}
 
 # Mid Elevation Source Plot
@@ -655,10 +635,10 @@ HighSeedPlot <- ggplot(HighPlotDat, aes(x = site, y = propgoodseed, fill = treat
 HighSeedPlot
 
 ```
+
 In both mid-elevation and high elevation sourced plants, there appears to be little differences in treatments in proportion viable seeds produced. There is, however, large amounts of variation for low to high elevation range edge sites, and a notable decrease in amount of data available for above range sites at both Nakiska and Hailstone Butte.
 
 \n
-
 
 ## PCA
 
@@ -667,12 +647,15 @@ Using 'totgoodseed' to measure the indirect fitness of the sampling plant commun
 ```{r}
 head(ltrsdat)
 ```
+
 ```{r}
 ltrs_pc <- subset(ltrsdat, subset = site %in% c("L", "M", "H"),
                    select=-c(aveseed2, totbadseed))
 head(ltrs_pc)
 ```
+
 ### performs a principal components analysis on the numeric data matrix
+
 ```{r}
 # delet NA values
 ltrs_pc <- ltrs_pc %>%
@@ -700,8 +683,8 @@ library(factoextra)
 eig.val1 <- get_eigenvalue(ltrsfull)
 eig.val1
 ```
-PC axes are uncorrelated with each other: that the diagonal is 1 represents the correlation of each PC axis with itself, while the off-diagonals are zero, meaning that the correlation coefficient is <0.001.
-Besides, for the dimensions, an eigenvalue > 1 indicates that the principal component (PCs) accounts for more variance than accounted by one of the original variables in standardized data.
+
+PC axes are uncorrelated with each other: that the diagonal is 1 represents the correlation of each PC axis with itself, while the off-diagonals are zero, meaning that the correlation coefficient is \<0.001. Besides, for the dimensions, an eigenvalue \> 1 indicates that the principal component (PCs) accounts for more variance than accounted by one of the original variables in standardized data.
 
 ```{r}
 ltrs_pc$PC1 <- ltrsfull$scores[,1]
@@ -744,9 +727,12 @@ fviz_pca_ind(ltrsfull,
              repel = TRUE
              )
 ```
+
 ```{r}
 autoplot(ltrsfull, data = ltrs_pc, size = 0.6, loadings = T, loadings.label = T) + theme_classic()
 ```
+
+Compare the direction of these projected eigenvectors to the loadings in the output, it shows that component 1 is affected by total leaf nodes and total fruits from all stems, while component 2 is more affected by average seeds produced by the primary fruit.
 
 ## Plotting Factor Analysis
 
@@ -759,7 +745,7 @@ ltrsdat$Source <- as.factor(ltrsdat$Source)
 ltrsdat$tbo <- as.factor(ltrsdat$tbo)
 ```
 
-### Calculate principal components
+### Calculate Principal Components
 
 ```{r}
 library(FactoMineR)
@@ -780,7 +766,6 @@ ltrs.famd <- FAMD(ltrs_fa,
 get_eigenvalue(ltrs.famd)
 ```
 
-
 ```{r}
 ## Plot individual observations
 fviz_famd_ind(ltrs.famd, label = "none", 
@@ -789,15 +774,59 @@ fviz_famd_ind(ltrs.famd, label = "none",
   xlim(-5, 6) + ylim (-4.5, 4.5) +
   theme(text = element_text(size = 15), axis.text.x = element_text(size = 15), axis.text.y = element_text(size = 15))
 ```
+
 As individuals with similar characteristics (in this case, in terms of plants' before- and after- habitat and reproductive success) are close to each other on the figure, the large overlap between the "OTC" and "TR" populations suggests that if there are significant/meaningful differences between control and warmed groups, they are likely complex and non-linear.
 
+***
 
+# Seed emergence vs. Range Analysis
 
+Question: do plants transplanted to warmer ranged seed earlier than plants in cooler ranges, and does this change between NK and HB?
 
+## Potential relationship between seed emergence(nEmzt) and range of plant habitats.
+```{r}
+#plot for HB created
+proHB_1 <- ggplot(proHB, 
+                  aes(x = Source, 
+                      fill = nEmzt)) + 
+  geom_bar(position = position_dodge(width=0.8)) +
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25) +
+  ylab("Seed emergence (# of nEmzt)")
 
+#plot for NK created
+proNK_1 <- ggplot(proNK, 
+                  aes(x = Source, 
+                      fill = nEmzt)) + 
+  geom_bar(position = position_dodge(width=0.8))+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)+
+  ylab("")+
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
 
+```{r}
+#the above two plots are arranged side-to-side for the purpose of comparison
+plot_grid(proHB_1, proNK_1, labels = c('HB','NK'), ncol=2) + theme_cowplot()
+```
 
+As seen in the plot, there is an obvious increase in the number of plant emergence at source E, which stands for the absolute high-elevation range edge, in NK comparing to HB. Increase in plant emergence are also seen in F (Fortress Mountain), L (low-elevation from that transet), and MT (neighbouring Moose Mountain above 2000m).
 
+***
+## Group by transplant location
+In this section, groups are categorized by transplant location (“treat”, control or warming chambers) using similar codes above.
+```{r}
+proHB_2 <- ggplot(proHB, aes(treat))+
+  geom_bar()+
+  scale_y_continuous(limits=c(0, 600))+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)
 
+proNK_2 <- ggplot(proNK, aes(treat))+
+  geom_bar()+
+  ylab("")+
+  geom_text(aes(label=..count..), stat= "count", position=position_dodge(width=0.9), vjust=-0.25)+
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 
-
+plot_grid(proHB_2, proNK_2, labels = c('HB','NK'), ncol=2) + theme_cowplot()
+```
+According to plots generated above indicates that the controlled normal plant population (TR) has greater number comparing to the ones within the Open topped warming chambers (OTC). When comparing the count number between HB and NK, both treats increase by approximately 40. Therefore, it is predicted that plants from higher elevations transplanted to warmer ranges will seed earlier. Plants from lower elevations transplanted to cooler ranges will seed later.
