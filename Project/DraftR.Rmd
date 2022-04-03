@@ -264,12 +264,12 @@ str(ltrsdat)
 ```
 
 ```{r}
-#ltrsdat$year <- as.factor(ltrsdat$year)
-#ltrsdat$transect <- as.factor(ltrsdat$transect)
-#ltrsdat$site <- as.factor(ltrsdat$site)
-#ltrsdat$treat <- as.factor(ltrsdat$treat)
-#ltrsdat$Source <- as.factor(ltrsdat$Source)
-#ltrsdat$tbo <- as.factor(ltrsdat$tbo)
+ltrsdat$year <- as.factor(ltrsdat$year)
+ltrsdat$transect <- as.factor(ltrsdat$transect)
+ltrsdat$site <- as.factor(ltrsdat$site)
+ltrsdat$treat <- as.factor(ltrsdat$treat)
+ltrsdat$Source <- as.factor(ltrsdat$Source)
+ltrsdat$tbo <- as.factor(ltrsdat$tbo)
 ```
 
 
@@ -554,6 +554,12 @@ PC axes are uncorrelated with each other: that the diagonal is 1 represents the 
 Besides, for the dimensions, an eigenvalue > 1 indicates that the principal component (PCs) accounts for more variance than accounted by one of the original variables in standardized data.
 
 ```{r}
+ltrs_pc$PC1 <- ltrsfull$scores[,1]
+ltrs_pc$PC2 <- ltrsfull$scores[,2]
+ltrs_pc$PC3 <- ltrsfull$scores[,3]
+```
+
+```{r}
 PCltrsMod1 <- lm(PC1 ~ site*treat, data = ltrs_pc)
 summary(PCltrsMod1)
 anova(PCltrsMod1)
@@ -574,9 +580,6 @@ anova(PCltrsMod3)
 ## Ploting PCA
 
 ```{r}
-ltrs_pc$PC1 <- ltrsfull$scores[,1]
-ltrs_pc$PC2 <- ltrsfull$scores[,2]
-ltrs_pc$PC3 <- ltrsfull$scores[,3]
 qplot(x = PC1, y = PC2, color = site, facets = "Source", data = ltrs_pc) +
 theme_classic()
 ```
@@ -603,11 +606,14 @@ autoplot(ltrsfull, data = ltrs_pc, size = 0.6, loadings = T, loadings.label = T)
 library(FactoMineR)
 
 ## FAMD
-ltrs_fa <- subset(ltrs_pc, 
-                   select=-c(PC1, PC2, PC3))
+ltrs_fa <- subset(ltrsdat, subset = site %in% c("L", "M", "H"),
+                   select=-c(aveseed2, totbadseed))
+
+ltrs_fa <- ltrs_fa %>%
+  na.omit()
 
 ltrs.famd <- FAMD(ltrs_fa, 
-                 sup.var = 11,  ## Set the target variable "totgoodseed" as a supplementary variable
+                 sup.var = 4,  ## Set the target variable "treatment" as a supplementary variable
                  graph = FALSE, 
                  ncp=25)
 
@@ -615,20 +621,16 @@ ltrs.famd <- FAMD(ltrs_fa,
 get_eigenvalue(ltrs.famd)
 ```
 
-```{r}
-#to do factor analysis, we change 'totgoodseed' from numeric variable into catergorical as 'low', 'med', 'high'
-ltrs_fa
-```
 
 ```{r}
 ## Plot individual observations
 fviz_famd_ind(ltrs.famd, label = "none", 
-              habillage = "totgoodseed", palette = c("#00AFBB", "#FC4E07"), # color by groups 
+              habillage = "treat", palette = c("#FC4E07",  "#63d5ff"), # color by groups 
               repel = TRUE, alpha.ind = 0.5) + 
   xlim(-5, 6) + ylim (-4.5, 4.5) +
-  theme(text = element_text(size=20), axis.text.x = element_text(size=20), axis.text.y = element_text(size=20))
+  theme(text = element_text(size = 15), axis.text.x = element_text(size = 15), axis.text.y = element_text(size = 15))
 ```
-
+As individuals with similar characteristics (in this case, in terms of plants' before- and after- habitat and reproductive success) are close to each other on the figure, the large overlap between the "OTC" and "TR" populations suggests that if there are significant/meaningful differences between control and warmed groups, they are likely complex and non-linear.
 
 
 
