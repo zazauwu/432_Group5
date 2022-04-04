@@ -139,6 +139,7 @@ ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
   ylab("Days with Snowpack") +
   theme_classic()
 ```
+
 Comparison of the total days with snowpack in winter among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change in days across years.
 
 ```{r}
@@ -156,6 +157,7 @@ ggplot(clim.not.win, aes(x = year, y = avmaxminTJuly, color = ID)) +
   ylab("Mean July temperature (ºC)") +
   theme_classic()
 ```
+
 Comparison of the mean July temperature (°C) among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change across years from 2011 to 2013.
 
 ## Visualize Climate Similarity/Disimilarity
@@ -181,6 +183,7 @@ ggplot(data = climwPDat, aes(x = Var1, y = Var2, fill = value)) +
   scale_fill_gradientn(colours = c("white","blue","green","red")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
+
 A tile plot that demonstrates similarity/dissimilarity of climate charateristics in winter across sample locations at elevation transect NK and HB from 2010 to 2014, color gradient from purple to red indicates value from 0 to >200 and grey indicates missing data. According to the distance matrix, climates in winter at high-elevation (~100m below range edge) and high-elevation range edge at HB are mostly distinct from the rest.
 
 ### In other seasons except winter from 2011 to 2013
@@ -204,7 +207,8 @@ ggplot(data = climnwPDat, aes(x = Var1, y = Var2, fill = value)) +
   scale_fill_gradientn(colours = c("white","blue","green","red")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
-Figure 4. A tile plot that demonstrates similarity/dissimilarity of climate charateristics in other seasons except winter across sample locations at elevation transect NK and HB from 2011 to 2013, color gradient from purple to red indicates value from 0 to >200 and grey indicates missing data. According to the distance matrix, climates at low- and mid-elevation at HB and above the high-elevation range edge at NK are mostly distinct from each other.
+
+A tile plot that demonstrates similarity/dissimilarity of climate charateristics in other seasons except winter across sample locations at elevation transect NK and HB from 2011 to 2013, color gradient from purple to red indicates value from 0 to >200 and grey indicates missing data. According to the distance matrix, climates at low- and mid-elevation at HB and above the high-elevation range edge at NK are mostly distinct from each other.
 
 # Lifetime Reproductive Success Similiarity Analysis
 
@@ -738,6 +742,7 @@ p-value >0.05 suggests there is no significant evidence in favor of a potential 
 ```{r, echo=FALSE, out.width="50%", fig.align = 'center'}
 knitr::include_graphics("./Figure/pca_table.png")
 ```
+
 Given by the table, in the principal component analysis, the most prominent biological factor (eigenvalue: 1.897, total variance explained: 63.2%) was total leaf nodes, including primary, secondary and tertiary stems.
 
 ## Ploting PCA
@@ -806,6 +811,17 @@ fviz_famd_ind(ltrs.famd, label = "none",
 ```
 
 As individuals with similar characteristics (in this case, in terms of plants' before- and after- habitat and reproductive success) are close to each other on the figure, the large overlap between the "OTC" and "TR" populations suggests that if there are significant/meaningful differences between control and warmed groups, they are likely complex and non-linear.
+
+```{r}
+#visualize the graph of variables
+fviz_pca_var(ltrs.famd,
+             col.var = "contrib", # Color by contributions to the PC
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE     # Avoid text overlapping
+             )
+```
+
+Positive correlated variables point to the same side of the plot. Negative correlated variables point to opposite sides of the graph.
 
 ***
 
