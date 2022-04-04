@@ -13,6 +13,7 @@ Although plant species are widely claimed to spread along environmental gradient
 ## Hypothesis with predicted figures:
 
 **H1:** Yellow rattle populations would show declined reproductive success (measured by seed viability and emergence) if transplanted from low elevation to higher elevation sites.
+
 **H2:** Margin of the decline would be reduced if populations were transplanted under warming condition.
 
 This project aims to investigate the following questions:
