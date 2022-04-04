@@ -7,7 +7,14 @@ https://datadryad.org/stash/dataset/doi:10.5061/dryad.3bd420c
 ## Introduction:
 Edge populations of plants may be able to expand species’ ranges if they are able to adapt to changing conditions. Low-, mid-, and high-range populations of Rhinanthus minor were transplanted outside and within their original ranges to test relative plant fitness, measured by seed emergence, proportion of plants to graduate to a higher-level life stage, and flowering dates. This study was carried out on two peaks, the Nakiska (NK) and Hailstone butte (HB) peaks, to investigate whether climate changes could modify plant communities' ability of local adaptation for range expansion.
 
+## Why interested:
+Although plant species are widely claimed to spread along environmental gradients led by local adaption, the trade-off with direct and indirect fitness is unclear. Specifically, before jumping to one conclusion, the potential relationship between range expansion and reproductive success needs to be carefully analyzed for ecological perspective; besides, whether global warming could affect such relationship should also be taken into consideration.
+
 ## Hypothesis with predicted figures:
+
+**H1:** Yellow rattle populations would show declined reproductive success (measured by seed viability and emergence) if transplanted from low elevation to higher elevation sites.
+**H2:** Margin of the decline would be reduced if populations were transplanted under warming condition.
+
 This project aims to investigate the following questions:
 
 
