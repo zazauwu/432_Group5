@@ -17,7 +17,9 @@ This project aims to investigate the following questions:
 **3.** Do plants transplanted to warmer ranged seed earlier than plants in cooler ranges, and does this change between NK and HB?
 ![seed emergence by transect](https://github.com/zazauwu/432_Group5/blob/main/Image/SeedEmergence.PNG) 
 ***
+
 ## Workflow:
+![workflow diagram](https://github.com/zazauwu/432_Group5/blob/main/Image/workflow.png)
 
 ***
 ## References:
