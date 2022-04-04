@@ -657,6 +657,8 @@ head(ltrs_pc)
 
 ### performs a principal components analysis on the numeric data matrix
 
+The following chunks are used to make table 1 attached in the poster.
+
 ```{r}
 # delet NA values
 ltrs_pc <- ltrs_pc %>%
@@ -698,19 +700,24 @@ PCltrsMod1 <- lm(PC1 ~ site*treat, data = ltrs_pc)
 summary(PCltrsMod1)
 anova(PCltrsMod1)
 ```
+p-value <0.05 suggests there is no significant evidence in favor of a potential relationship between component 1 and factors including treatment type and elevation sites except median-elevation. Specifically, the linear regression line is steepest for the plants normally transplanted(TR) to median elevation.
 
 ```{r}
 PCltrsMod2 <- lm(PC2 ~ site*treat, data = ltrs_pc)
 summary(PCltrsMod2)
 anova(PCltrsMod2)
 ```
+p-value <0.05 suggests there is significant evidence in favor of a potential relationship between component 2 and factors including elevation and treatment.
 
 ```{r}
 PCltrsMod3 <- lm(PC3 ~ site*treat, data = ltrs_pc)
 summary(PCltrsMod3)
 anova(PCltrsMod3)
 ```
+p-value >0.05 suggests there is no significant evidence in favor of a potential relationship between component 3 and factors including elevation and treatment.
 
+### Table 1
+![pca analysis table 1](https://github.com/zazauwu/432_Group5/blob/main/Project/Figure/pca%20table.png)
 ## Ploting PCA
 
 ```{r}
