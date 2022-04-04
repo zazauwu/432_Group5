@@ -49,14 +49,22 @@ sapply(clim, class)
 ```
 
 ### Description of the variables: 
-\n 
+
 **d.snowpack.10.11** = days with snowpack winter 2010-2011 
+
 **wTmin.10.11** = minimum temperature winter (C) at plant height 2010-2011 
+
 **Dec.FebTav.10.11** = mean temperature at plant height from Dec1st 2010 - Feb 28th 2011 
-**d.grows.11** = \# days in growing season 2011 (start / end of gorwing season determined by sustained snow or frost) **GDD.grows.11** = \# growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011 
+
+**d.grows.11** = \# days in growing season 2011 (start / end of gorwing season determined by sustained snow or frost)
+
+**GDD.grows.11** = \# growing degree days (Tbase=10C, Tmax capped at 30C) in growing season of 2011 
+
 **GDD.yr.11** = \# growing degree days in 2011 (ie not truncated to estimated growing season) 
+
 **avmaxminTJuly.11** = mean July 2011 temperature (C) calculated from daily min and max T: 
 mean(July1stmin + July1stmax + July2ndmin + July2ndmax + ... July31stmi + July31stmax) 
+
 **avTJuly.11** = mean July 2011 temperature (C) calculated from raw data (ie \>2 measurements per day)
 
 ```{r}
@@ -201,20 +209,33 @@ Figure 4. A tile plot that demonstrates similarity/dissimilarity of climate char
 # Lifetime Reproductive Success Similiarity Analysis
 
 ### Description of the variables: 
-\n 
+
 **year** = year plants were active 
+
 **transect** = elevational transect (where NK = Nakiska and HB = Hailstone Butte) 
+
 **site** = site seeds were transplanted into. L = low elevation, M = mid-elevation (range centre), H = high-elevation (\~100 m below range edge), E or HE = high-elevation range edge, A = above range (HB), A1 = 1st site above the range at NK, A2 = second site above the range at NK 
+
 **treat** = treatment in warming experiment. TR = normal transplant (control), OTC = Open topped warming chambers (warmed), dormant = plants found \> 1 year after seeds planted 
+
 **Source** = source population: low-elevation from that transet (L), mid-elevation from that transect (M), high-elevation (within 100 masl of absolute high-elevation range edge) from that transect (H), edge (absolute high-elevation range edge E), high-elevation (2000 m) populations on neighbouring Moose Mountain (MT) and Fortress Mountain (F), and seeds produced by plants transplanted above the range the previous year (A) 
+
 **plant** = plantID within each 5x5 subplot (row.column from 1.1 = topleft plant to 5.5 = bottom right plant) 
+
 **tbo** = top bitten off by mammal. 0 = no, plant intact, 1 = top bitten off the primary stem, 2 = top bitten off some secondary stalks but primary stem intact 
+
 **Ln.tot** = total leaf nodes (each leaf node produces 2 leaves), including primary, secondary and tertiary stems 
+
 **Fr.tot** = total fruits from all stems
+
 **aveseed1** = average number of seeds per fruit from primary stem fruits 
+
 **aveseed2** = average number of seeds per fruit from secondary stem fruits 
+
 **totgoodseed** = total viable seed produced by the plant 
+
 **totbadseed** = total non-viable seed produced by the plant
+
 
 ## Tidy Data
 
@@ -545,7 +566,6 @@ HighLeafPlot
 
 The boxplot showing leaf growth data for mid-elevation plants appears to show that some differences do exist for plants transplanted to mid-elevation and high elevation sites. Mid-elevation to mid-elevation plants appear to have decreased leaf growth in warming chambers compared to the control, indicating that the conditions for growth are not within the species optimal. Conversely, mid-elevation plants transplanted to high elevation with warming showed higher levels of leaf growth than the control, likely due to the warming chamber producing a temperature closer to their native range. The boxplot showing leaf growth data for high elevation plants appears to show that there may have been a difference in leaf growth for high elevation sourced plants transplanted to mid-elevation sites. When placed in a warming chamber, these plants appear to have slightly elevated levels of leaf growth compared to the control, however there is a high degree of variability.
 
-\n
 
 ### Compare fruits between treatments
 
@@ -592,7 +612,6 @@ HighFruitPlot
 
 Similar to the pattern observed in leaf growth of mid-elevation plants transplanted to mid- and high elevation sites, mid-elevation plants transplanted to mid- and high elevation sites show possible differences in fruit development. Possibly as a result of growing in elevated temperatures outside of the plant's native range, plants transplanted to mid-elevation warming chambers appear to have decreased fruit growth compared to controls. Plants transplanted to high elevation appear to have a much higher amount of fruits on average, possibly due to being grown in a more optimal temperature range. The boxplot showing fruit development for high elevation sourced plants appears to not illustrate many differences between sites or between treated groups and controls. The largest difference appears to be in plants transplanted above the range at Hailstone Butte, but this may be the result of a lack of data at that site.
 
-\n
 
 ### Compare proportion of good seeds between sites for each source
 
@@ -639,7 +658,6 @@ HighSeedPlot
 
 In both mid-elevation and high elevation sourced plants, there appears to be little differences in treatments in proportion viable seeds produced. There is, however, large amounts of variation for low to high elevation range edge sites, and a notable decrease in amount of data available for above range sites at both Nakiska and Hailstone Butte.
 
-\n
 
 ## PCA
 
@@ -717,7 +735,11 @@ anova(PCltrsMod3)
 p-value >0.05 suggests there is no significant evidence in favor of a potential relationship between component 3 and factors including elevation and treatment.
 
 ### Table 1
-![pca analysis table 1](https://github.com/zazauwu/432_Group5/blob/main/Project/Figure/pca%20table.png)
+```{r, echo=FALSE, out.width="50%", fig.align = 'center'}
+knitr::include_graphics("./Figure/pca_table.png")
+```
+Given by the table, in the principal component analysis, the most prominent biological factor (eigenvalue: 1.897, total variance explained: 63.2%) was total leaf nodes, including primary, secondary and tertiary stems.
+
 ## Ploting PCA
 
 ```{r}
