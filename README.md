@@ -38,5 +38,6 @@ the main code chuncks are embedded in the 'FinalReport.rmd' file while 'ltrsPlot
 ***
 ## References:
 Hargreaves, Anna L.; Eckert, Chris G.; Eckert, Christopher G. (2018), Data from: Local adaptation primes cold-edge populations for range expansion but not warming-induced range shifts, Dryad, Dataset, https://doi.org/10.5061/dryad.3bd420c
+
 Hargreaves, Anna L.; Eckert, Chris G.; Eckert, Christopher G. (2018).  Local adaptation primes cold-edge populations for range expansion but not warming-induced range shifts. Ecology Letters 22: 78-88. https://doi.org/10.1111/ele.13169
 
