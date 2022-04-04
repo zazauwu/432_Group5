@@ -1,5 +1,5 @@
 ---
-title: "Project"
+title: "Report with embedded R code"
 author: "Alyssa Reynolds, Zhijun Li, Runzi Qi"
 date: '2022-03-22'
 output: pdf_document
@@ -131,7 +131,7 @@ ggplot(clim.win, aes(x = year, y = d.snowpack, color = ID)) +
   ylab("Days with Snowpack") +
   theme_classic()
 ```
-Figure 1. Comparison of the total days with snowpack in winter among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change in days across years.
+Comparison of the total days with snowpack in winter among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change in days across years.
 
 ```{r}
 #select all rows that contains season info except for winter and columns related
@@ -148,7 +148,7 @@ ggplot(clim.not.win, aes(x = year, y = avmaxminTJuly, color = ID)) +
   ylab("Mean July temperature (ºC)") +
   theme_classic()
 ```
-Figure 2. Comparison of the mean July temperature (°C) among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change across years from 2011 to 2013.
+Comparison of the mean July temperature (°C) among sites sampled from elevational transect NK and HB. Grey solid lines indicate the change across years from 2011 to 2013.
 
 ## Visualize Climate Similarity/Disimilarity
 
@@ -173,6 +173,7 @@ ggplot(data = climwPDat, aes(x = Var1, y = Var2, fill = value)) +
   scale_fill_gradientn(colours = c("white","blue","green","red")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
+A tile plot that demonstrates similarity/dissimilarity of climate charateristics in winter across sample locations at elevation transect NK and HB from 2010 to 2014, color gradient from purple to red indicates value from 0 to >200 and grey indicates missing data. According to the distance matrix, climates in winter at high-elevation (~100m below range edge) and high-elevation range edge at HB are mostly distinct from the rest.
 
 ### In other seasons except winter from 2011 to 2013
 
@@ -195,7 +196,7 @@ ggplot(data = climnwPDat, aes(x = Var1, y = Var2, fill = value)) +
   scale_fill_gradientn(colours = c("white","blue","green","red")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
 ```
-
+Figure 4. A tile plot that demonstrates similarity/dissimilarity of climate charateristics in other seasons except winter across sample locations at elevation transect NK and HB from 2011 to 2013, color gradient from purple to red indicates value from 0 to >200 and grey indicates missing data. According to the distance matrix, climates at low- and mid-elevation at HB and above the high-elevation range edge at NK are mostly distinct from each other.
 
 # Lifetime Reproductive Success Similiarity Analysis
 
