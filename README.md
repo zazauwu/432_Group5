@@ -9,6 +9,8 @@ Edge populations of plants may be able to expand species’ ranges if they are a
 
 ## Hypothesis with predicted figures:
 This project aims to investigate the following questions:
+
+
 **1.** Do sites sampled at different elevation from NK and HB vary in climate?
 ![climate variation](https://github.com/zazauwu/432_Group5/blob/main/Image/ClimateVariation.png)
 
@@ -19,6 +21,18 @@ This project aims to investigate the following questions:
 ***
 
 ## Workflow:
+
+All raw datasets are located in './Project/Data';
+
+predicted figures are saved in 'Image';
+
+R project is saved in 'Project';
+
+output plots used for presentation are saved in './Project/Figure';
+
+the main code chuncks are embedded in the 'FinalReport.rmd' file while 'ltrsPlots.rmd' includes codes for supplementary figures.
+
+
 ![workflow diagram](https://github.com/zazauwu/432_Group5/blob/main/Image/workflow.png)
 
 ***
